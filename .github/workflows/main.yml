@@ -1,0 +1,24 @@
+name: XFINANCE-CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: 22
+        script: |
+          cd VNF_CamDo_API
+          git fetch origin
+          git checkout main
+          git pull
+          npm install
+          pm2 reload X-FINANCE-TEST
