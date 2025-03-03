@@ -20,5 +20,4 @@ jobs:
           git fetch origin
           git checkout main
           git pull
-          npm install
           pm2 restart 3
