@@ -26,4 +26,4 @@ jobs:
           git checkout main
           git pull
           npm install
-          pm2 reload 3
+          pm2 reload VNFX-FINANCE-TEST

@@ -15,5 +15,5 @@ app.use(express.urlencoded({
 route(app);
 
 app.listen(port, () => {
-  console.log(`X-FsINANCE listening on port ${port}`)
+  console.log(`X-FINANCE listening on port ${port}`)
 })
