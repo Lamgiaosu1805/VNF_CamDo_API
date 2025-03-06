@@ -1,7 +1,9 @@
 const HandleErrorCode = (errorCode) => {
     switch (errorCode) {
         case "01":
-            return "Error:01, Username đã tồn tại";
+            return `Error: ${errorCode}, Có lỗi khi validate số điện thoại khách hàng`;
+        case "02":
+            return `Error: ${errorCode}, Sai định dạng số điện thoại`;
         
     
         default:
@@ -9,11 +11,4 @@ const HandleErrorCode = (errorCode) => {
     }
 }
 
-//Auth: "01", "02", "05", "06", "07", "08", "09", "13", "14"
-
-//User: "03", "04", "10"
-
-//Xứ Đoàn: "11"
-
-//Ngành: "12"
 module.exports = HandleErrorCode
