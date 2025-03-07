@@ -19,50 +19,54 @@ const AuthController = {
             FailureResponse("01", error)
         }
     },
-    validateLogin: async (req, res) => { 
+    validateLogin: async (req, res) => {
         try {
             const { username } = req.body;
             const { deviceId } = req
             const customer = await CustomerModel.findOne({ username });
             if (!customer) {
-                return res.status(404).json({ message: "Người dùng không tồn tại" });
+                return res.json(FailureResponse("04"));
             }
             if (customer.deviceId === deviceId) {
-                return res.json({ message: "Đăng nhập thành công, không cần OTP" });
+                return res.json(SuccessResponse({
+                    message: "Đăng nhập không cần OTP"
+                }));
             }
             const otp = "000000";
-            const key = `otp:${username}:login`;
+            const key = `otp:${username}:login:${deviceId}`;
 
             await redis.set(key, otp, "EX", 60); // Lưu OTP vào Redis, hết hạn sau 60 giây
 
-            res.json({ message: "OTP đã được gửi", otp }); // Trong thực tế, bạn sẽ gửi OTP qua email/SMS
+            res.json(SuccessResponse({
+                message: "OTP đã được gửi"
+            }));
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("05"))
         }
     },
     validateOTP: async (req, res) => {
         try {
             const { username, otp } = req.body;
             const { deviceId } = req
-            const key = `otp:${username}:login`;
+            const key = `otp:${username}:login:${deviceId}`;
             const storedOtp = await redis.get(key);
-            console.log(storedOtp)
+
             if (!storedOtp) {
-                return res.status(400).json({ message: "OTP không hợp lệ hoặc đã hết hạn" });
+                return res.json(FailureResponse("07"));
             }
         
             if (storedOtp !== otp) {
-                return res.status(400).json({ message: "OTP không chính xác" });
+                return res.json(FailureResponse("08"));
             }
             await redis.del(key); // Xóa OTP sau khi xác minh thành công
 
-            // Cập nhật deviceId mới trong MongoDB
-            console.log(deviceId)
             await CustomerModel.updateOne({ username }, { deviceId: deviceId });
           
-            res.json({ message: "Xác thực OTP thành công! Device ID đã được cập nhật." });
+            res.json(SuccessResponse({ message: "Xác thực OTP thành công! Device ID đã được cập nhật." }));
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("06"))
         }
     }
 }
