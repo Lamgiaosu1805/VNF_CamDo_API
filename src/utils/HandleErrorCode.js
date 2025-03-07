@@ -4,8 +4,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi validate số điện thoại khách hàng`;
         case "02":
             return `Error: ${errorCode}, Sai định dạng số điện thoại`;
-        
-    
+        case "03":
+            return `Error: ${errorCode}, Thiếu tham số Device Id`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
