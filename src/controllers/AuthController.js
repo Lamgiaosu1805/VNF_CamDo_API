@@ -34,10 +34,11 @@ const AuthController = {
             }
             const otp = "000000";
             const key = `otp:${username}:login:${deviceId}`;
-
-            await redis.set(key, otp, "EX", 60); // Lưu OTP vào Redis, hết hạn sau 60 giây
+            const time_expr = 60
+            await redis.set(key, otp, "EX", time_expr); // Lưu OTP vào Redis, hết hạn sau 60 giây
 
             res.json(SuccessResponse({
+                exprTime: time_expr,
                 message: "OTP đã được gửi"
             }));
         } catch (error) {
