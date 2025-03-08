@@ -12,7 +12,8 @@ const AuthController = {
                 return
             }
             res.json(SuccessResponse({
-                isCustomer: customer ? true : false
+                isCustomer: customer ? true : false,
+                message: customer ? "" : "Chưa có tài khoản, vui lòng đăng ký"
             }))
         } catch (error) {
             console.log(error)
