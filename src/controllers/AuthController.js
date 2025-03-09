@@ -30,7 +30,8 @@ const AuthController = {
             }
             if (customer.deviceId === deviceId) {
                 return res.json(SuccessResponse({
-                    message: "Đăng nhập không cần OTP"
+                    type: 1,
+                    message: "Trùng device Id, Đăng nhập không cần OTP"
                 }));
             }
             const otp = "000000";
@@ -40,7 +41,8 @@ const AuthController = {
 
             res.json(SuccessResponse({
                 exprTime: time_expr,
-                message: "OTP đã được gửi"
+                message: "Không trùng deviceId, OTP đã được gửi",
+                type: 2
             }));
         } catch (error) {
             console.log(error)
