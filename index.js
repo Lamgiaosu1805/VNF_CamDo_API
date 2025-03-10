@@ -3,6 +3,7 @@ const app = express()
 const route = require('./src/routes')
 const morgan = require('morgan')
 const db = require('./src/config/connectdb')
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({
 
 db.connect();
 
+app.use(cors());
 //routing
 route(app);
 
