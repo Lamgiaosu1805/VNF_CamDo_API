@@ -1,9 +1,9 @@
 
-const validateDeviceId = require('../middlewares/validateDeviceId');
+const validateDevice = require('../middlewares/validateDeviceId');
 const authRouter = require('./auth')
 
 const route = (app) => {
-    app.use(`/auth`, validateDeviceId, authRouter)
+    app.use(`/auth`, validateDevice.checkNullDeviceId, authRouter)
 }
 
 module.exports = route;
