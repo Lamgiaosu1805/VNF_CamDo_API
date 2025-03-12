@@ -4,17 +4,21 @@ const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 
 const AuthController = {
     validatePhoneNumber: async (req, res) => {
-        const {body} = req
         try {
+            const {body, deviceId} = req
             const customer = await CustomerModel.findOne({username: body.phoneNumber})
             if(body.phoneNumber?.toString().length != 10) {
-                res.json(FailureResponse("02"))
-                return
+                return res.json(FailureResponse("02"))
             }
-            res.json(SuccessResponse({
-                isCustomer: customer ? true : false,
-                message: customer ? "" : "Chưa có tài khoản, vui lòng đăng ký"
-            }))
+            if(customer) {
+                return res.json(SuccessResponse({
+                    isCustomer: true,
+                    message: ""
+                }))
+            }
+            const otp = "000000";
+            const key = `otp:${body.username}:login:${deviceId}`;
+            
         } catch (error) {
             console.log(error)
             FailureResponse("01", error)

@@ -4,11 +4,17 @@ const moment = require('moment-timezone')
 
 const Customer = new Schema({
     username: { type: String, required: true },
-    password: {type: String, required: true},
-    customerInfo: { type: Object, required: true },
+    password: { type: String, required: true },
+    fullname: { type: String },
+    birth: { type: String },
+    cccd: { type: String },
+    cccdFrontImg: {type: String},
+    cccdBackImg: {type: String},
+    diaChiThuongTru: {type: String},
+    diaChiHienTai: {type: String},
     deviceId: { type: String, default: "" },
     firebaseToken: { type: String, default: "" },
-    isDelete: {type: Boolean, default: false},
+    isDelete: { type: Boolean, default: false },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7
@@ -17,6 +23,7 @@ const Customer = new Schema({
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7
     },
+    isEkyc: {type: Boolean, default: false},
 }, {
     timestamps: false
 })
