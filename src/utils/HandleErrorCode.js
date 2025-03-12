@@ -16,6 +16,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, OTP không hợp lệ hoặc đã hết hạn`;
         case "08":
             return `Error: ${errorCode}, OTP không chính xác`;
+        case "09":
+            return `Error: ${errorCode}, Device ID không trùng khớp`;
+        case "10":
+            return `Error: ${errorCode}, Có lỗi khi check trùng device ID`;
 
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

@@ -72,6 +72,9 @@ const AuthController = {
             console.log(error)
             res.json(FailureResponse("06"))
         }
+    },
+    test: (req, res) => {
+        res.send("a")
     }
 }
 

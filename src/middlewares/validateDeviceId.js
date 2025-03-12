@@ -1,3 +1,4 @@
+const CustomerModel = require("../models/CustomerModel");
 const { FailureResponse } = require("../utils/ResponseRequest");
 
 const validateDevice = {
@@ -12,8 +13,20 @@ const validateDevice = {
     },
 
     checkSameDeviceId: (req, res, next) => {
-        validateDevice.checkNullDeviceId(req, res, () => {
-            
+        validateDevice.checkNullDeviceId(req, res, async () => {
+            try {
+                const user = req.user
+                const customer = await CustomerModel.findOne({deviceId: req.deviceId}, {username: user?.username ?? req.body.username })
+                if(customer) {
+                    next()
+                }
+                else {
+                    res.json(FailureResponse("09"))
+                }
+            } catch (error) {
+                console.log(error)
+                res.json(FailureResponse("10", error))
+            }
         })
     }
 }
