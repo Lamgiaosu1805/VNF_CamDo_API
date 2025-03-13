@@ -180,6 +180,7 @@ const AuthController = {
             }))
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("15", error))
         }
     }
 }

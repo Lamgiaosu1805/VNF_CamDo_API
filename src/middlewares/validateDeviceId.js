@@ -16,7 +16,7 @@ const validateDevice = {
         validateDevice.checkNullDeviceId(req, res, async () => {
             try {
                 const user = req.user
-                const customer = await CustomerModel.findOne({deviceId: req.deviceId, username: user?.username ?? req.body.username})
+                const customer = await CustomerModel.findOne({deviceId: req.deviceId, username: user?.username || req.body.username})
                 if(customer) {
                     req.customer = customer
                     next()
