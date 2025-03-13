@@ -9,4 +9,7 @@ router.post('/validateOTP', validateDevice.checkNullDeviceId, AuthController.val
 router.post('/signUp', validateDevice.checkNullDeviceId, AuthController.signUp);
 router.post('/login', validateDevice.checkSameDeviceId, AuthController.login);
 
+// router.post('/createSystemAccount', AuthController.createAccountAdmin);
+router.post('/loginAdmin', AuthController.loginAdmin);
+
 module.exports = router;

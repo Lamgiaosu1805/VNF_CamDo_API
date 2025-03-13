@@ -1,4 +1,5 @@
 const redis = require("../config/connectRedis")
+const AdminAccountModel = require("../models/AdminAccountModel")
 const CustomerModel = require("../models/CustomerModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const bcrypt = require('bcrypt')
@@ -103,7 +104,7 @@ const AuthController = {
             if(!validPassWord) {
                 return res.json(FailureResponse("13"))
             }
-            const accessToken = genAccessToken(customer)
+            const accessToken = genAccessToken(customer, "")
             res.json(SuccessResponse({
                 message: "Đăng nhập thành công",
                 accessToken
@@ -120,14 +121,14 @@ const AuthController = {
             const value = await redis.get(key);
             if(value == req.deviceId) {
                 const salt = await bcrypt.genSalt(10)
-                const hashedPassword = await bcrypt.hash(body.password, salt);
+                const hashedPassword = await bcrypt.hash(body.password, salt)
                 const newCustomer = new CustomerModel({
                     username: body.username,
                     password: hashedPassword,
                     deviceId: req.deviceId
                 })
                 const customer = await newCustomer.save()
-                const accessToken = genAccessToken(customer)
+                const accessToken = genAccessToken(customer, "")
                 await redis.del(key)
                 return res.json(SuccessResponse({
                     message: "Thêm mới tài khoản thành công",
@@ -139,15 +140,56 @@ const AuthController = {
             console.log(error)
             res.json(FailureResponse("12", error))
         }
+    },
+    createAccountAdmin: async (req, res) => {
+        try {
+            const {body} = req
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(body.password, salt)
+            const newAdminAccount = new AdminAccountModel({
+                username: body.username,
+                password: hashedPassword
+            })
+            await newAdminAccount.save()
+            res.json(SuccessResponse({
+                message: "Tạo tài khoản admin thành công"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("15", error))
+        }
+    },
+    loginAdmin: async (req, res) => {
+        try {
+            const {body} = req
+            const adminAcc = await AdminAccountModel.findOne({username: body.username})
+            if(!adminAcc) {
+                return res.json(FailureResponse("04"))
+            }
+            const validPassWord = await bcrypt.compare(
+                body.password,
+                adminAcc.password
+            )
+            if(!validPassWord) {
+                return res.json(FailureResponse("13"))
+            }
+            const accessToken = genAccessToken(adminAcc, "admin")
+            res.json(SuccessResponse({
+                message: "Đăng nhập thành công",
+                accessToken
+            }))
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
-const genAccessToken = (account) => {
+const genAccessToken = (account, type) => {
     return jwt.sign({
         id: account._id,
         username: account.username,
     },
-        process.env.SECRET_KEY,
+        type == "admin" ? process.env.SECRET_KEY_QT : process.env.SECRET_KEY,
         {
             expiresIn: "365d"
         }
