@@ -24,6 +24,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Phiên làm việc không hợp lệ`;
         case "12":
             return `Error: ${errorCode}, Có lỗi trong quá trình đăng ký tài khoản`;
+        case "13":
+            return `Error: ${errorCode}, Sai tên đăng nhập hoặc mật khẩu`;
+        case "14":
+            return `Error: ${errorCode}, Có lỗi trong quá trình login`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

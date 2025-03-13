@@ -93,8 +93,25 @@ const AuthController = {
             res.json(FailureResponse("06", error))
         }
     },
-    test: (req, res) => {
-        res.send("a")
+    login: async (req, res) => {
+        try {
+            const {body, customer} = req
+            const validPassWord = await bcrypt.compare(
+                body.password,
+                customer.password
+            )
+            if(!validPassWord) {
+                return res.json(FailureResponse("13"))
+            }
+            const accessToken = genAccessToken(customer)
+            res.json(SuccessResponse({
+                message: "Đăng nhập thành công",
+                accessToken
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("14", error))
+        }
     },
     signUp: async (req, res) => {
         try {

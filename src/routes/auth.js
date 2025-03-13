@@ -7,8 +7,6 @@ router.post('/validatePhoneNumber', validateDevice.checkNullDeviceId, AuthContro
 router.post('/validateLogin', validateDevice.checkNullDeviceId, AuthController.validateLogin);
 router.post('/validateOTP', validateDevice.checkNullDeviceId, AuthController.validateOTP);
 router.post('/signUp', validateDevice.checkNullDeviceId, AuthController.signUp);
-
-
-router.post('/test', validateDevice.checkSameDeviceId, AuthController.test);
+router.post('/login', validateDevice.checkSameDeviceId, AuthController.login);
 
 module.exports = router;
