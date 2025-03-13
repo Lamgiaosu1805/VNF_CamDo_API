@@ -32,6 +32,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi trong quá trình tạo tài khoản Admin`;
         case "16":
             return `Error: ${errorCode}, Có lỗi trong quá trình đăng nhập tài khoản Admin`;
+        case "17":
+            return `Error: ${errorCode}, Có lỗi trong quá trình sử dụng tính năng quên mật khẩu`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

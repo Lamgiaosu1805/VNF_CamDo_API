@@ -182,6 +182,21 @@ const AuthController = {
             console.log(error)
             res.json(FailureResponse("15", error))
         }
+    },
+    forgotPassword: async (req, res) => {
+        try {
+            const {body, deviceId} = req
+            const otp = "000000";
+            const key = `otp:${body.username}:forgotPassword:${deviceId}`;
+            const time_expr = 60
+            await redis.set(key, otp, "EX", time_expr); // Lưu OTP vào Redis, hết hạn sau 60 giây
+            res.json(SuccessResponse({
+                message: "Đã gửi OTP"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("17"))
+        }
     }
 }
 
