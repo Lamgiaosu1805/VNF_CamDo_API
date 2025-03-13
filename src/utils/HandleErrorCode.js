@@ -20,7 +20,11 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Device ID không trùng khớp`;
         case "10":
             return `Error: ${errorCode}, Có lỗi khi check trùng device ID`;
-
+        case "11":
+            return `Error: ${errorCode}, Phiên làm việc không hợp lệ`;
+        case "12":
+            return `Error: ${errorCode}, Có lỗi trong quá trình đăng ký tài khoản`;
+    
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

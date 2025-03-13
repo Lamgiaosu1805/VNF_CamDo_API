@@ -5,7 +5,8 @@ const router = express.Router()
 
 router.post('/validatePhoneNumber', validateDevice.checkNullDeviceId, AuthController.validatePhoneNumber);
 router.post('/validateLogin', validateDevice.checkNullDeviceId, AuthController.validateLogin);
-router.post('/validateOTPLogin', validateDevice.checkNullDeviceId, AuthController.validateOTP);
+router.post('/validateOTP', validateDevice.checkNullDeviceId, AuthController.validateOTP);
+router.post('/signUp', validateDevice.checkNullDeviceId, AuthController.signUp);
 
 
 router.post('/test', validateDevice.checkSameDeviceId, AuthController.test);
