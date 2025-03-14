@@ -67,7 +67,6 @@ const AuthController = {
             const { username, otp, type } = req.body;
             const { deviceId } = req
             const key = `otp:${username}:${type}:${deviceId}`;
-            console.log(key)
             const storedOtp = await redis.get(key);
             const keyForgotPass = `${username}:forgotPasswordValidate`
 
