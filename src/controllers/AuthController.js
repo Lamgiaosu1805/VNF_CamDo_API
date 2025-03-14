@@ -67,7 +67,9 @@ const AuthController = {
             const { username, otp, type } = req.body;
             const { deviceId } = req
             const key = `otp:${username}:${type}:${deviceId}`;
+            console.log(key)
             const storedOtp = await redis.get(key);
+            const keyForgotPass = `${username}:forgotPasswordValidate`
 
             if (!storedOtp) {
                 return res.json(FailureResponse("07"));
@@ -77,7 +79,11 @@ const AuthController = {
                 return res.json(FailureResponse("08"));
             }
             
-            if(type == "login" || type == "forgotPassword") {
+            if(type == "login") {
+                await CustomerModel.updateOne({ username }, { deviceId });
+            }
+            else if(type == "forgotPassword") {
+                await redis.set(keyForgotPass, "validated", "EX", 3600)
                 await CustomerModel.updateOne({ username }, { deviceId });
             }
             else if(type == "signUp") {
@@ -198,12 +204,36 @@ const AuthController = {
             const key = `otp:${body.username}:forgotPassword:${deviceId}`;
             const time_expr = 60
             await redis.set(key, otp, "EX", time_expr); // Lưu OTP vào Redis, hết hạn sau 60 giây
+            console.log(key)
             res.json(SuccessResponse({
                 message: "Đã gửi OTP"
             }))
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("17"))
+        }
+    },
+    resetPassword: async (req, res) => {
+        try {
+            const {body, customer} = req
+            const keyForgotPass = `${body.username}:forgotPasswordValidate`
+            const otpValidateStatus = await redis.get(keyForgotPass)
+            if(otpValidateStatus != "validated") {
+                console.log("Yêu cầu Validate OTP trước")
+                return res.json(FailureResponse("11"))
+            }
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(body.password, salt)
+            const accessToken = genAccessToken(customer, "")
+            await CustomerModel.updateOne({username: body.username}, {password: hashedPassword})
+            await redis.del(keyForgotPass)
+            res.json(SuccessResponse({
+                message: "Cập nhật mật khẩu thành công",
+                accessToken: accessToken
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("18", error))
         }
     }
 }

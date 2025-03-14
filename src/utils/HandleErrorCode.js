@@ -21,7 +21,7 @@ const HandleErrorCode = (errorCode) => {
         case "10":
             return `Error: ${errorCode}, Có lỗi khi check trùng device ID`;
         case "11":
-            return `Error: ${errorCode}, Phiên làm việc không hợp lệ`;
+            return `Error: ${errorCode}, Phiên làm việc không hợp lệ, yêu cầu xác minh OTP trước`;
         case "12":
             return `Error: ${errorCode}, Có lỗi trong quá trình đăng ký tài khoản`;
         case "13":
@@ -34,6 +34,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi trong quá trình đăng nhập tài khoản Admin`;
         case "17":
             return `Error: ${errorCode}, Có lỗi trong quá trình sử dụng tính năng quên mật khẩu`;
+        case "18":
+            return `Error: ${errorCode}, Có lỗi trong quá trình reset mật khẩu`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
