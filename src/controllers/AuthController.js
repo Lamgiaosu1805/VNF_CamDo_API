@@ -77,11 +77,15 @@ const AuthController = {
                 return res.json(FailureResponse("08"));
             }
             
-            if(type == "login") {
+            if(type == "login" || type == "forgotPassword") {
                 await CustomerModel.updateOne({ username }, { deviceId });
             }
-            if(type == "signUp") {
+            else if(type == "signUp") {
                 await redis.set(`${username}:validateDevice`, deviceId, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
+            }
+            else {
+                console.log(`${type}: type không xác định`)
+                return res.json(FailureResponse("07"))
             }
             res.json(SuccessResponse({ 
                 message: "Xác thực OTP thành công!.",
@@ -186,6 +190,10 @@ const AuthController = {
     forgotPassword: async (req, res) => {
         try {
             const {body, deviceId} = req
+            const customer = await CustomerModel.findOne({username: body.username})
+            if(!customer) {
+                return res.json(FailureResponse("04"))
+            }
             const otp = "000000";
             const key = `otp:${body.username}:forgotPassword:${deviceId}`;
             const time_expr = 60
