@@ -36,6 +36,14 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi trong quá trình sử dụng tính năng quên mật khẩu`;
         case "18":
             return `Error: ${errorCode}, Có lỗi trong quá trình reset mật khẩu`;
+        case "19":
+            return `Error: ${errorCode}, Có lỗi trong quá trình thêm loại tài sản`;
+        case "20":
+            return `Error: ${errorCode}, Token Invalid`;
+        case "21":
+            return `Error: ${errorCode}, Có lỗi khi verify token`;
+        case "22":
+            return `Error: ${errorCode}, Not Authenticated`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
