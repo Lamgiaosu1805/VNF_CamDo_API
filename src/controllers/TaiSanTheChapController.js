@@ -16,6 +16,18 @@ const TaiSanTheChapController = {
             console.log(error)
             res.json(FailureResponse("19", error))
         }
+    },
+    showLoaiTaiSan: async (req, res) => {
+        try {
+            const listLoaiTaiSan = await LoaiTaiSanTheChapModel.find()
+            res.json(SuccessResponse({
+                message: "Lấy danh sách thành công",
+                data: listLoaiTaiSan
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("23", error))
+        }
     }
 }
 

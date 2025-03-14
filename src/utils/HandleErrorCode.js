@@ -44,6 +44,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi verify token`;
         case "22":
             return `Error: ${errorCode}, Not Authenticated`;
+        case "23":
+            return `Error: ${errorCode}, Lấy danh sách tài sản lỗi`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
