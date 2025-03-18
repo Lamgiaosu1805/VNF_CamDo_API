@@ -4,7 +4,7 @@ const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const YeuCauVayVonController = {
     guiYeuCauVayVon: async (req, res) => {
         try {
-            const {nhanHieu, tenTaiSan, idLoaiTaiSan} = req.body
+            const {nhanHieu, tenTaiSan, idLoaiTaiSan, namSX} = req.body
             if (!req.filePaths) {
                 return res.json(FailureResponse("25"));
             }
