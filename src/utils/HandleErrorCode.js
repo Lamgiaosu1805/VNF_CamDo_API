@@ -56,6 +56,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Đã tồn tại yêu cầu gọi vốn đang chờ phê duyệt`;
         case "28":
             return `Error: ${errorCode}, Tài khoản chưa EKYC`;
+        case "29":
+            return `Error: ${errorCode}, Có lỗi khi ekyc`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
