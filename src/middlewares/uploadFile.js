@@ -71,10 +71,10 @@ const processImages = async (req, res, next) => {
 };
 
 const uploadHandler = async (req, res, next) => {
-    const yeuCau = await YeuCauVayVonModel.findOne({customerId: req.user.id, status: 1})
-    if(yeuCau) {
-        return res.json(FailureResponse("27"))
-    }
+    // const yeuCau = await YeuCauVayVonModel.findOne({customerId: req.user.id, status: 1})
+    // if(yeuCau) {
+    //     return res.json(FailureResponse("27"))
+    // }
     upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             return res.json(FailureResponse("24", err.message));
