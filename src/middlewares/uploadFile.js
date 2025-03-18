@@ -21,7 +21,7 @@ if (!fs.existsSync(baseCompressedFolder)) fs.mkdirSync(baseCompressedFolder, { r
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const username = req.body.username || 'unknown';
+        const username = req.user.username || 'unknown';
         const userFolderOriginal = path.join(baseOriginalFolder, username);
         const userFolderCompressed = path.join(baseCompressedFolder, username);
         
