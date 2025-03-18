@@ -8,7 +8,7 @@ const { FailureResponse } = require('../utils/ResponseRequest');
 // const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
 // const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
 
-//isProduction
+//isProductionn
 const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
 const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
 
