@@ -13,7 +13,8 @@ const YeuCauVayVonController = {
                 nhanHieu: nhanHieu,
                 tenTaiSan: tenTaiSan,
                 listAnhTaiSan: req.filePaths,
-                customerId: req.user.id
+                customerId: req.user.id,
+                namSX: namSX
             })
             await newData.save()
             res.json(SuccessResponse({

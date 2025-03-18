@@ -12,6 +12,7 @@ const YeuCauVayVon = new Schema({
     lyDoHuy: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
     listAnhTaiSan: { type: Array, required: true },
+    namSX: { type: String, default: "" },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7
