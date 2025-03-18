@@ -8,7 +8,7 @@ const YeuCauVayVon = new Schema({
     nhanHieu: { type: String },
     tenTaiSan: { type: String },
     ghiChu: { type: String },
-    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Đã giải ngân, 4. Huỷ
+    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Chờ phê duyệt, 4. Đã giải ngân, 5. Huỷ
     lyDoHuy: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
     listAnhTaiSan: { type: Array, required: true },
