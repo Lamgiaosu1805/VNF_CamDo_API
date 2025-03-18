@@ -48,8 +48,8 @@ const processImages = async (req, res, next) => {
     try {
         req.filePaths = req.files.map(file => {
             return { 
-                original: path.join(relativeBaseOriginal, req.body.username || 'unknown', file.filename),
-                compressed: path.join(relativeBaseCompressed, req.body.username || 'unknown', file.filename)
+                original: path.join(relativeBaseOriginal, req.user.username || 'unknown', file.filename),
+                compressed: path.join(relativeBaseCompressed, req.user.username || 'unknown', file.filename)
             };
         });
 
