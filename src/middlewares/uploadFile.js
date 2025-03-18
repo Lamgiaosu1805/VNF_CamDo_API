@@ -3,7 +3,9 @@ const path = require('path');
 const sharp = require('sharp');
 const fs = require('fs');
 const { FailureResponse } = require('../utils/ResponseRequest');
+const YeuCauVayVonModel = require('../models/YeuCauVayVonModel');
 
+//=================================================================================
 //isDev
 // const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
 // const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
@@ -11,6 +13,8 @@ const { FailureResponse } = require('../utils/ResponseRequest');
 //isProductionn
 const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
 const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
+
+//=================================================================================
 
 const relativeBaseOriginal = 'X_finance_upload/file_goc';
 const relativeBaseCompressed = 'X_finance_upload/file_nen';
@@ -66,7 +70,11 @@ const processImages = async (req, res, next) => {
     }
 };
 
-const uploadHandler = (req, res, next) => {
+const uploadHandler = async (req, res, next) => {
+    const yeuCau = await YeuCauVayVonModel.findOne({customerId: req.user.id, status: 1})
+    if(yeuCau) {
+        return res.json(FailureResponse("27"))
+    }
     upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             return res.json(FailureResponse("24", err.message));

@@ -3,15 +3,15 @@ const Schema = mongoose.Schema
 const moment = require('moment-timezone')
 
 const YeuCauVayVon = new Schema({
-    username: { type: String, required: true },
+    customerId: { type: String, required: true },
     idLoaiTaiSan: { type: String, required: true },
     nhanHieu: { type: String },
     tenTaiSan: { type: String },
     ghiChu: { type: String },
     status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Đã giải ngân, 4. Huỷ
-    lyDoHuy: { type: String },
+    lyDoHuy: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
-    listAnhTaiSan: { type: Array, default: [] },
+    listAnhTaiSan: { type: Array, required: true },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7

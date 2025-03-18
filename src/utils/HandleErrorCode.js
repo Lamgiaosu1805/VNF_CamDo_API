@@ -50,6 +50,12 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi upload ảnh`;
         case "25":
             return `Error: ${errorCode}, Không có ảnh để upload`;
+        case "26":
+            return `Error: ${errorCode}, Có lỗi khi gửi yêu cầu vay vốn`;
+        case "27":
+            return `Error: ${errorCode}, Đã tồn tại yêu cầu gọi vốn đang chờ phê duyệt`;
+        case "28":
+            return `Error: ${errorCode}, Tài khoản chưa EKYC`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
