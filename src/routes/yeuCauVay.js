@@ -8,6 +8,6 @@ const router = express.Router()
 //admin
 
 //customer
-router.post('/guiYeuCau', uploadHandler, processImages, YeuCauVayVonController.guiYeuCauVayVon);
+router.post('/guiYeuCau', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, uploadHandler, processImages, YeuCauVayVonController.guiYeuCauVayVon);
 
 module.exports = router;

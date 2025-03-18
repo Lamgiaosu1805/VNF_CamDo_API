@@ -46,6 +46,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Not Authenticated`;
         case "23":
             return `Error: ${errorCode}, Lấy danh sách tài sản lỗi`;
+        case "24":
+            return `Error: ${errorCode}, Có lỗi khi upload ảnh`;
+        case "25":
+            return `Error: ${errorCode}, Không có ảnh để upload`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
