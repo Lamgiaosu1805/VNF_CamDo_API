@@ -10,6 +10,6 @@ router.get('/listTSTheChapAdmin', auth.verifyTokenAdmin, TaiSanTheChapController
 
 
 //customer
-router.get('/listTSTheChap', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, TaiSanTheChapController.showLoaiTaiSan);
+router.get('/listTSTheChap', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, TaiSanTheChapController.showLoaiTaiSan);
 
 module.exports = router;
