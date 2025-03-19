@@ -4,7 +4,7 @@ const moment = require('moment-timezone')
 
 const YeuCauVayVon = new Schema({
     customerId: { type: String, required: true },
-    idLoaiTaiSan: { type: String, required: true },
+    idLoaiTaiSan: { type: String, required: true, ref: "loaiTaiSanTheChap" },
     nhanHieu: { type: String },
     tenTaiSan: { type: String },
     ghiChu: { type: String },

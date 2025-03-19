@@ -27,13 +27,28 @@ const YeuCauVayVonController = {
     },
     getDanhSachYeuCauVayVon: async (req, res, next) => {
         try {
-            const listData = await YeuCauVayVonModel.find()
+            const listData = await YeuCauVayVonModel
+                .find()
+                .populate("idLoaiTaiSan")
+                .lean()
+                .then((results) =>
+                    results.map((item) => ({
+                    ...item,
+                    loaiTaiSanInfo: {
+                        _id: item.idLoaiTaiSan?._id,
+                        ten: item.idLoaiTaiSan?.ten,
+                    },
+                    idLoaiTaiSan: undefined,
+                    }))
+                );
+
             res.json(SuccessResponse({
                 message: "Lấy danh sách yêu cầu thành công",
                 data: listData
             }))
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("32"))
         }
     }
 }
