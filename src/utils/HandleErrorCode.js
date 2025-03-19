@@ -58,6 +58,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Tài khoản chưa EKYC`;
         case "29":
             return `Error: ${errorCode}, Có lỗi khi ekyc`;
+        case "30":
+            return `Error: ${errorCode}, Có lỗi khi save device Token`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
