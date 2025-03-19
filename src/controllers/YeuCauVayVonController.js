@@ -29,7 +29,7 @@ const YeuCauVayVonController = {
         try {
             const listData = await YeuCauVayVonModel
                 .find()
-                .populate("idLoaiTaiSan")
+                .populate("idLoaiTaiSan").sort({ createdAt: -1 })
                 .lean()
                 .then((results) =>
                     results.map((item) => ({
