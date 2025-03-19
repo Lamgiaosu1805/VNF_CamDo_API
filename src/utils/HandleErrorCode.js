@@ -60,6 +60,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi ekyc`;
         case "30":
             return `Error: ${errorCode}, Có lỗi khi save device Token`;
+        case "31":
+            return `Error: ${errorCode}, Có lỗi khi gửi thông báo`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

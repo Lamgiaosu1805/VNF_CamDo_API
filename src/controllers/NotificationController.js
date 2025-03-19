@@ -2,6 +2,7 @@ const CustomerDeviceHistoryModel = require("../models/CustomerDeviceHistoryModel
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { default: mongoose } = require("mongoose")
+const { sendNotification } = require('../utils/Tools')
 
 const NotificationController = {
     saveToken: async (req, res) => {
@@ -44,7 +45,19 @@ const NotificationController = {
             console.log(error)
             res.json(FailureResponse("30", error))
         }
-    }
+    },
+    pushNotification: async (req, res, next) => {
+        const {deviceToken, title, content} = req.body
+        try {
+            sendNotification(deviceToken, title, content)
+            res.json(SuccessResponse({
+                message: "Đã gửi thông báo"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("31", error))
+        }
+    },
 }
 
 module.exports = NotificationController
