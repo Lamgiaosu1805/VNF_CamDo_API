@@ -17,6 +17,8 @@ app.use(express.urlencoded({
 db.connect();
 
 app.use(cors());
+app.use("/uploads", express.static("/var/www/"));
+
 //routing
 route(app);
 
