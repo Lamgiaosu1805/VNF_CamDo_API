@@ -9,5 +9,6 @@ const router = express.Router()
 
 //customer
 router.post('/guiYeuCau', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, uploadHandler, processImages, YeuCauVayVonController.guiYeuCauVayVon);
+router.get('/getDanhSach', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, YeuCauVayVonController.getDanhSachYeuCauVayVon);
 
 module.exports = router;

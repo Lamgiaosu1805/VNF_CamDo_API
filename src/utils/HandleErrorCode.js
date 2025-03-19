@@ -62,6 +62,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi save device Token`;
         case "31":
             return `Error: ${errorCode}, Có lỗi khi gửi thông báo`;
+        case "32":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách yêu cầu vay vốn`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

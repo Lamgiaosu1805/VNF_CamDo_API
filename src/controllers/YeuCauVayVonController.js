@@ -24,7 +24,17 @@ const YeuCauVayVonController = {
             console.log(error)
             res.json(FailureResponse("26", error))
         }
-        
+    },
+    getDanhSachYeuCauVayVon: async (req, res, next) => {
+        try {
+            const listData = await YeuCauVayVonModel.find()
+            res.json(SuccessResponse({
+                message: "Lấy danh sách yêu cầu thành công",
+                data: listData
+            }))
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 module.exports = YeuCauVayVonController
