@@ -13,7 +13,7 @@ const NotificationController = {
             const data = await NotificationTokenModel.findOne({userId: req.user.id})
             const dataUserDevice = await CustomerDeviceHistoryModel.findOne({userId: req.user.id, deviceId: req.deviceId})
             if(dataUserDevice) {
-                await dataUserDevice.updateOne({userId: req.user.id}, {session})
+                await dataUserDevice.updateOne(req.body, {session})
             }
             else {
                 const newDataUserDevice = new CustomerDeviceHistoryModel({
