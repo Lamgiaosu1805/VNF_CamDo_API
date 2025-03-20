@@ -8,6 +8,7 @@ const router = express.Router()
 //admin
 router.post('/guiYeuCauGiaiNgan', auth.verifyTokenAdmin, YeuCauVayVonController.guiYeuCauGiaiNgan);
 router.post('/thamDinh', auth.verifyTokenAdmin, YeuCauVayVonController.thamDinh);
+router.post('/tinhSoTien', auth.verifyTokenAdmin, YeuCauVayVonController.tinhTien);
 
 
 //customer

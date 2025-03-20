@@ -97,6 +97,29 @@ const YeuCauVayVonController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    tinhTien: (req, res) => {
+        try {
+            //Lãi Suất 12% / 1 năm = so tien vay * (12/100) * (so ngay vay / 365) = tien lai
+            //tien goc so tien vay / so thang vay
+            //tong tra du kien = 2 cai tren
+            const {tongTienVay, soKy, donVi} = req.body
+            const monthlyRate = 12/12/100;
+            const soTienGoc = tongTienVay / soKy
+            const soTienLai = tongTienVay * monthlyRate
+            const monthlyPayment = soTienGoc + soTienLai
+            res.json(SuccessResponse({
+                message: "Thành công",
+                data: {
+                    soTienGoc: soTienGoc,
+                    soTienLai: soTienLai,
+                    tongSoTienTraHangThang: monthlyPayment,
+                    donVi: donVi //Đơn vị mặc định là VNĐ
+                }
+            }))
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 module.exports = YeuCauVayVonController
