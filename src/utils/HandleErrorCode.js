@@ -66,6 +66,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách yêu cầu vay vốn`;
         case "33":
             return `Error: ${errorCode}, Có lỗi khi gửi yêu cầu giải ngân`;
+        case "34":
+            return `Error: ${errorCode}, Có lỗi khi hoàn thành thẩm định`;
+        case "35":
+            return `Error: ${errorCode}, Không tìm thấy yêu cầu vay vốn`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

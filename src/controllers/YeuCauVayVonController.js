@@ -1,5 +1,7 @@
+const NotificationTokenModel = require("../models/NotificationTokenModel");
 const YeuCauVayVonModel = require("../models/YeuCauVayVonModel");
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest");
+const { sendNotification } = require("../utils/Tools");
 
 const YeuCauVayVonController = {
     guiYeuCauVayVon: async (req, res) => {
@@ -63,6 +65,36 @@ const YeuCauVayVonController = {
             }))
         } catch (error) {
             res.json(FailureResponse("33", error))
+            console.log(error)
+        }
+    },
+    thamDinh: async (req, res) => {
+        var response
+        try {
+            const user = req.user
+            const {idYeuCau, giaTriThamDinh} = req.body
+            response = await YeuCauVayVonModel.findByIdAndUpdate(idYeuCau, {status: 2, idNguoiThamDinh: user.id, giaTriSauThamDinh: giaTriThamDinh})
+            if(!response) {
+                return res.json(FailureResponse("35"))
+            }
+            res.json(SuccessResponse({
+                message: "Đã thẩm định"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("34", error))
+        }
+        try {
+            if(response) {
+                //Thiếu create Noti để sau
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Yêu cầu vay vốn mã ${response.maYeuCau} đã được thẩm định. Vui lòng vào app để xem chi tiết giá trị thẩm định`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: response.customerId})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            }
+        } catch (error) {
             console.log(error)
         }
     }

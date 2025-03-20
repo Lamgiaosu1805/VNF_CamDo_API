@@ -16,6 +16,9 @@ const YeuCauVayVon = new Schema({
     namSX: { type: String, default: "" },
     idNguoiPheDuyet: { type: String, default: "" },
     idNguoiGiaiNgan: { type: String, default: "" },
+    idNguoiThamDinh: { type: String, default: "" },
+    giaTriSauThamDinh: { type: Number, default: 0 },
+    donViGia: { type: String, default: "VNĐ" },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7
