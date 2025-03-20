@@ -14,7 +14,8 @@ const YeuCauVayVonController = {
                 tenTaiSan: tenTaiSan,
                 listAnhTaiSan: req.filePaths,
                 customerId: req.user.id,
-                namSX: namSX
+                namSX: namSX,
+                maYeuCau: "VNF" + Date.now() + '-' + Math.round(Math.random() * 1E9)
             })
             await newData.save()
             res.json(SuccessResponse({

@@ -4,11 +4,12 @@ const moment = require('moment-timezone')
 
 const YeuCauVayVon = new Schema({
     customerId: { type: String, required: true },
+    maYeuCau: { type: String, required: true, unique: true },
     idLoaiTaiSan: { type: String, required: true, ref: "loaiTaiSanTheChap" },
     nhanHieu: { type: String },
     tenTaiSan: { type: String },
     ghiChu: { type: String },
-    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Đã phê duyệt chờ giải ngân, 4. Đã giải ngân, 5. Huỷ
+    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã thẩm định, 3. Đã phê duyệt chờ giải ngân, 4. Đã giải ngân, 5. Huỷ
     lyDoHuy: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
     listAnhTaiSan: { type: Array, required: true },
