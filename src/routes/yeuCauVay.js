@@ -6,6 +6,8 @@ const { processImages, uploadHandler } = require('../middlewares/uploadFile');
 const router = express.Router()
 
 //admin
+router.post('/guiYeuCauGiaiNgan', auth.verifyTokenAdmin, YeuCauVayVonController.guiYeuCauGiaiNgan);
+
 
 //customer
 router.post('/guiYeuCau', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, uploadHandler, processImages, YeuCauVayVonController.guiYeuCauVayVon);

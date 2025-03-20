@@ -9,7 +9,7 @@ const NotificationController = {
         const session = await mongoose.startSession()
         session.startTransaction();
         try {
-            const {deviceToken, OS, deviceName} = req.body
+            const { deviceToken, OS, deviceName } = req.body
             const data = await NotificationTokenModel.findOne({userId: req.user.id})
             const dataUserDevice = await CustomerDeviceHistoryModel.findOne({userId: req.user.id, deviceId: req.deviceId})
             if(dataUserDevice) {

@@ -8,11 +8,13 @@ const YeuCauVayVon = new Schema({
     nhanHieu: { type: String },
     tenTaiSan: { type: String },
     ghiChu: { type: String },
-    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Chờ phê duyệt, 4. Đã giải ngân, 5. Huỷ
+    status: { type: Number, required: true, default: 1 }, //1. Chờ tư vấn, 2. Đã chăm sóc, 3. Đã phê duyệt chờ giải ngân, 4. Đã giải ngân, 5. Huỷ
     lyDoHuy: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
     listAnhTaiSan: { type: Array, required: true },
     namSX: { type: String, default: "" },
+    idNguoiPheDuyet: { type: String, default: "" },
+    idNguoiGiaiNgan: { type: String, default: "" },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7

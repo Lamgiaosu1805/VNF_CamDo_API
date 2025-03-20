@@ -30,6 +30,7 @@ const YeuCauVayVonController = {
             const listData = await YeuCauVayVonModel
                 .find()
                 .populate("idLoaiTaiSan").sort({ createdAt: -1 })
+                .select("-idNguoiPheDuyet -idNguoiGiaiNgan")
                 .lean()
                 .then((results) =>
                     results.map((item) => ({
@@ -49,6 +50,19 @@ const YeuCauVayVonController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("32"))
+        }
+    },
+    guiYeuCauGiaiNgan: async (req, res) => {
+        try {
+            const user = req.user
+            const {idYeuCau} = req.body
+            await YeuCauVayVonModel.findByIdAndUpdate(idYeuCau, {status: 3, idNguoiPheDuyet: user.id})
+            res.json(SuccessResponse({
+                message: "Gửi yêu cầu giải ngân thành công"
+            }))
+        } catch (error) {
+            res.json(FailureResponse("33", error))
+            console.log(error)
         }
     }
 }
