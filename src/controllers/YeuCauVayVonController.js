@@ -105,20 +105,28 @@ const YeuCauVayVonController = {
             //tong tra du kien = 2 cai tren
             const {tongTienVay, soKy, donVi} = req.body
             const monthlyRate = 12/12/100;
-            const soTienGoc = tongTienVay / soKy
-            const soTienLai = tongTienVay * monthlyRate
-            const monthlyPayment = soTienGoc + soTienLai
+            const soTienGocHangThang = tongTienVay / soKy
+            const soTienLaiHangThang = tongTienVay * monthlyRate
+            const monthlyPayment = soTienGocHangThang + soTienLaiHangThang
+            const soTienBaoHiem = 0
+            const soTienDuocGiaiNgan = tongTienVay - soTienBaoHiem
             res.json(SuccessResponse({
                 message: "Thành công",
                 data: {
-                    soTienGoc: soTienGoc,
-                    soTienLai: soTienLai,
-                    tongSoTienTraHangThang: monthlyPayment,
+                    soKyTraNo: soKy,
+                    tongSoTienVay: tongTienVay,
+                    tongSoTienPhaiTra: monthlyPayment * soKy,
+                    soTienGocHangThang: soTienGocHangThang,
+                    soTienLaiHangThang: soTienLaiHangThang,
+                    soTienTraHangThang: monthlyPayment,
+                    soTienBaoHiem: soTienBaoHiem,
+                    soTienDuocGiaiNgan: soTienDuocGiaiNgan,
                     donVi: donVi //Đơn vị mặc định là VNĐ
                 }
             }))
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("36", error))
         }
     }
 }
