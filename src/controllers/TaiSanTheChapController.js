@@ -5,8 +5,10 @@ const TaiSanTheChapController = {
     createLoaiTaiSan: async (req, res) => {
         try {
             const {body} = req
+            const number = await LoaiTaiSanTheChapModel.countDocuments()
             const newData = new LoaiTaiSanTheChapModel({
-                ten: body.tenLoaiTaiSan
+                ten: body.tenLoaiTaiSan,
+                type: number + 1
             })
             await newData.save()
             res.json(SuccessResponse({
