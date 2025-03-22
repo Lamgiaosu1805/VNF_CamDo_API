@@ -12,5 +12,6 @@ const router = express.Router()
 //customer
 router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.ekyc);
 router.post('/saveDeviceToken', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, NotificationController.saveToken);
+router.get('/getCustomerInfo', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.getCustomerInfo);
 
 module.exports = router;

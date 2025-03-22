@@ -74,6 +74,9 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi tính tiền trả hàng kỳ`;
         case "37":
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách yêu cầu vay vốn`;
+        case "38":
+            return `Error: ${errorCode}, Có lỗi khi lấy thông tin cá nhân khách hàng`;
+    
     
     
         default:

@@ -12,6 +12,18 @@ const CustomerController = {
             console.log(error)
             res.json(FailureResponse("", error))
         }
+    },
+    getCustomerInfo: async (req, res) => {
+        try {
+            const customerInfo = await CustomerModel.findById(req.user.id).select("-password -firebaseToken")
+            res.json(SuccessResponse({
+                message: "Lấy thông tin thành công",
+                data: customerInfo
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("38", error))
+        }
     }
 }
 module.exports = CustomerController
