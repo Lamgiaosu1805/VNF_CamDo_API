@@ -9,6 +9,7 @@ const router = express.Router()
 router.post('/guiYeuCauGiaiNgan', auth.verifyTokenAdmin, YeuCauVayVonController.guiYeuCauGiaiNgan);
 router.post('/thamDinh', auth.verifyTokenAdmin, YeuCauVayVonController.thamDinh);
 router.post('/tinhSoTien', auth.verifyTokenAdmin, YeuCauVayVonController.tinhTien);
+router.get('/getDanhSachYCAdmin', auth.verifyTokenAdmin, YeuCauVayVonController.getYCGoiVonAdmin);
 
 
 //customer

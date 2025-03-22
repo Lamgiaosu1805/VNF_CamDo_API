@@ -129,6 +129,19 @@ const YeuCauVayVonController = {
             console.log(error)
             res.json(FailureResponse("36", error))
         }
+    },
+    getYCGoiVonAdmin: async (req, res) => {
+        try {
+            const {status} = req.query
+            const danhSachYc = await YeuCauVayVonModel.find({status: status})
+            res.json(SuccessResponse({
+                message: "Lấy danh sách thành công",
+                data: danhSachYc
+            }))
+        } catch (error) {
+            console.log(error),
+            res.json(FailureResponse("37", error))
+        }
     }
 }
 module.exports = YeuCauVayVonController
