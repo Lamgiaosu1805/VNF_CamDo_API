@@ -31,7 +31,7 @@ const YeuCauVayVonController = {
     getDanhSachYeuCauVayVon: async (req, res, next) => {
         try {
             const listData = await YeuCauVayVonModel
-                .find({customerId: req.user.id})
+                .find()
                 .populate("idLoaiTaiSan").sort({ createdAt: -1 })
                 .select("-idNguoiPheDuyet -idNguoiGiaiNgan")
                 .lean()
@@ -41,6 +41,7 @@ const YeuCauVayVonController = {
                     loaiTaiSanInfo: {
                         _id: item.idLoaiTaiSan?._id,
                         ten: item.idLoaiTaiSan?.ten,
+                        type: item.idLoaiTaiSan?.type
                     },
                     idLoaiTaiSan: undefined,
                     }))
