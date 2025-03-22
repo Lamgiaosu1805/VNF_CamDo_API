@@ -31,7 +31,7 @@ const YeuCauVayVonController = {
     getDanhSachYeuCauVayVon: async (req, res, next) => {
         try {
             const listData = await YeuCauVayVonModel
-                .find()
+                .find({customerId: req.user.id})
                 .populate("idLoaiTaiSan").sort({ createdAt: -1 })
                 .select("-idNguoiPheDuyet -idNguoiGiaiNgan")
                 .lean()
