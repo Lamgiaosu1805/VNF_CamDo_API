@@ -7,6 +7,7 @@ const Customer = new Schema({
     password: { type: String, required: true },
     fullname: { type: String },
     birth: { type: String },
+    anhChanDung: { type: String },
     cccd: { type: String },
     cccdFrontImg: {type: String},
     cccdBackImg: {type: String},
