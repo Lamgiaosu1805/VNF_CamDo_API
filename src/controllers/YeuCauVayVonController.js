@@ -60,7 +60,10 @@ const YeuCauVayVonController = {
         try {
             const user = req.user
             const {idYeuCau} = req.body
-            await YeuCauVayVonModel.findByIdAndUpdate(idYeuCau, {status: 3, idNguoiPheDuyet: user.id})
+            const yeuCau = await YeuCauVayVonModel.findOneAndUpdate({_id: idYeuCau, status: 2}, {status: 3, idNguoiPheDuyet: user.id})
+            if(!yeuCau) {
+                return res.json(FailureResponse("35"))
+            }
             res.json(SuccessResponse({
                 message: "Gửi yêu cầu giải ngân thành công"
             }))
