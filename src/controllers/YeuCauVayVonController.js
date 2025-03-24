@@ -59,8 +59,8 @@ const YeuCauVayVonController = {
     guiYeuCauGiaiNgan: async (req, res) => {
         try {
             const user = req.user
-            const {idYeuCau} = req.body
-            const yeuCau = await YeuCauVayVonModel.findOneAndUpdate({_id: idYeuCau, status: 2}, {status: 3, idNguoiPheDuyet: user.id})
+            const {idYeuCau, soKyTraNo} = req.body
+            const yeuCau = await YeuCauVayVonModel.findOneAndUpdate({_id: idYeuCau, status: 2}, {status: 3, idNguoiPheDuyet: user.id, soKyTraNo: soKyTraNo})
             if(!yeuCau) {
                 return res.json(FailureResponse("35"))
             }
@@ -145,6 +145,7 @@ const YeuCauVayVonController = {
             console.log(error),
             res.json(FailureResponse("37", error))
         }
-    }
+    },
+
 }
 module.exports = YeuCauVayVonController
