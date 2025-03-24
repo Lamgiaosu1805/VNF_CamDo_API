@@ -149,6 +149,9 @@ const YeuCauVayVonController = {
             res.json(FailureResponse("37", error))
         }
     },
+    dongYGiaiNgan: async (req, res) => {
+        
+    }
 
 }
 module.exports = YeuCauVayVonController
