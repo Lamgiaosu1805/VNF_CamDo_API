@@ -1,5 +1,6 @@
 const NotificationTokenModel = require("../models/NotificationTokenModel");
 const YeuCauVayVonModel = require("../models/YeuCauVayVonModel");
+const moment = require('moment');
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest");
 const { sendNotification } = require("../utils/Tools");
 
@@ -150,7 +151,47 @@ const YeuCauVayVonController = {
         }
     },
     dongYGiaiNgan: async (req, res) => {
-        
+        try {
+            const {idYeuCau} = req.body
+            const yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, status: 3})
+            if(!yeuCau) {
+                return res.json(FailureResponse("35"))
+            }
+            const soKy = yeuCau.soKyTraNo
+            const totalMoney = yeuCau.giaTriSauThamDinh * (1 + 0.12)
+            const today = moment();
+            const ngayTraNo = today.date();
+
+            let dueDates = [];
+
+            let baseAmount = Math.floor(totalMoney / soKy);
+            let remainder = Math.round(totalMoney - baseAmount * soKy);
+
+            for (let i = 1; i <= soKy; i++) {
+                let dueDate = today.clone().add(i, 'months').date(ngayTraNo).format('DD/MM/YYYY');
+                let amount = baseAmount;
+                
+                if (i === 1) {
+                    amount += remainder; // Tháng đầu tiên nhận phần lẻ
+                }
+
+                amount = Math.round(amount);
+                dueDates.push({
+                    customerId: yeuCau.customerId,
+                    maYeuCau: yeuCau.maYeuCau,
+                    ky: i,
+                    ngayTraNo: dueDate,
+                    soTienCanTra: amount,
+                });
+            }
+            await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
+            res.json(SuccessResponse({
+                message: "Đã đồng ý giải ngân, hợp đồng đã được gửi",
+            }));
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("41", error))
+        }
     }
 
 }

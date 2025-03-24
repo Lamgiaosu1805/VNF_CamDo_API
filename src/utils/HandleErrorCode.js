@@ -80,6 +80,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Số kỳ trả nợ phải lớn hơn 0`;
         case "40":
             return `Error: ${errorCode}, Có lỗi khi gửi vị trí khách hàng`;
+        case "41":
+            return `Error: ${errorCode}, Có lỗi khi đồng ý giải ngân`;
     
     
         default:

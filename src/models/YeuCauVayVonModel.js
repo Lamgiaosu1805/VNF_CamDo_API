@@ -20,6 +20,7 @@ const YeuCauVayVon = new Schema({
     giaTriSauThamDinh: { type: Number, default: 0 },
     donViGia: { type: String, default: "VNĐ" },
     soKyTraNo: { type: Number, default: 0 },
+    kyTraNo: { type: Array, default: [] },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7
