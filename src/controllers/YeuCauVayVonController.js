@@ -60,6 +60,9 @@ const YeuCauVayVonController = {
         try {
             const user = req.user
             const {idYeuCau, soKyTraNo} = req.body
+            if(soKyTraNo <= 0) {
+                return res.json(FailureResponse("39"))
+            }
             const yeuCau = await YeuCauVayVonModel.findOneAndUpdate({_id: idYeuCau, status: 2}, {status: 3, idNguoiPheDuyet: user.id, soKyTraNo: soKyTraNo})
             if(!yeuCau) {
                 return res.json(FailureResponse("35"))
