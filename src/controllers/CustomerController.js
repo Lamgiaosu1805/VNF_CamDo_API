@@ -11,7 +11,7 @@ const CustomerController = {
             }))
         } catch (error) {
             console.log(error)
-            res.json(FailureResponse("", error))
+            res.json(FailureResponse("29", error))
         }
     },
     getCustomerInfo: async (req, res) => {
