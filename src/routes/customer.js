@@ -13,5 +13,6 @@ const router = express.Router()
 router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.ekyc);
 router.post('/saveDeviceToken', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, NotificationController.saveToken);
 router.get('/getCustomerInfo', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.getCustomerInfo);
+router.post('/pushLocation', validateDevice.checkSameDeviceId, CustomerController.pushLocation);
 
 module.exports = router;

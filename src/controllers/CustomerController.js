@@ -1,3 +1,4 @@
+const CustomerHistoryLocationModel = require("../models/CustomerHistoryLocationModel")
 const CustomerModel = require("../models/CustomerModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 
@@ -23,6 +24,24 @@ const CustomerController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("38", error))
+        }
+    },
+    pushLocation: async (req, res) => {
+        try {
+            const { latitude, longitude, actionPush, username } = req.body
+            const newLocation = new CustomerHistoryLocationModel({
+                latitude: latitude,
+                longitude: longitude,
+                username: username,
+                actionPush: actionPush
+            })
+            await newLocation.save()
+            res.json(SuccessResponse({
+                message: "Gửi vị trí thành công"
+            }))
+        } catch (error) {
+            res.json(FailureResponse("40", error))
+            console.log(error)
         }
     }
 }
