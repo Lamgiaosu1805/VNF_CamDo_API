@@ -39,7 +39,7 @@ const HopDongController = {
             await newHopDong.save({session})
             const chiTietKhoanVay = {
                 soTienVay: yeuCau.giaTriSauThamDinh,
-                soTienCanTra: yeuCau.giaTriSauThamDinh * (1 + 0.12),
+                soTienCanTra: Math.round(yeuCau.giaTriSauThamDinh * (1 + 0.12)),
                 soTienbaoHiem: 0,
                 soTienDuocGiaiNgan: yeuCau.giaTriSauThamDinh - 0,
                 laiXuat: "12%/năm",

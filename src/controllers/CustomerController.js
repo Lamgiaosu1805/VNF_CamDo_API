@@ -43,6 +43,18 @@ const CustomerController = {
             res.json(FailureResponse("40", error))
             console.log(error)
         }
+    },
+    layDanhSachKhachHang: async (req, res) => {
+        try {
+            const listCustomer = await CustomerModel.find({isDelete: false}).select("-password")
+            res.json(SuccessResponse({
+                message: "Lấy danh sách thành công",
+                data: listCustomer
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("", error))
+        }
     }
 }
 module.exports = CustomerController

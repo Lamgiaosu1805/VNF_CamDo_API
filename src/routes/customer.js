@@ -8,6 +8,7 @@ const NotificationController = require('../controllers/NotificationController');
 const router = express.Router()
 
 //admin
+router.get('/danhSachKhachHang', auth.verifyTokenAdmin, CustomerController.layDanhSachKhachHang);
 
 //customer
 router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.ekyc);
