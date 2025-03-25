@@ -151,6 +151,7 @@ const YeuCauVayVonController = {
         }
     },
     dongYGiaiNgan: async (req, res) => {
+        var response
         try {
             const {idYeuCau} = req.body
             const yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, status: 3})
@@ -184,13 +185,26 @@ const YeuCauVayVonController = {
                     soTienCanTra: amount,
                 });
             }
-            await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
+            response = await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
             res.json(SuccessResponse({
                 message: "Đã đồng ý giải ngân, hợp đồng đã được gửi",
             }));
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("41", error))
+        }
+        try {
+            if(response) {
+                //Thiếu create Noti để sau
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Yêu cầu vay vốn mã ${response.maYeuCau} đã được đồng ý giải ngân. Vui lòng vào app ký hợp đồng để giải ngân`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: response.customerId})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
