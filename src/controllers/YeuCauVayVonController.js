@@ -44,6 +44,7 @@ const YeuCauVayVonController = {
                         ten: item.idLoaiTaiSan?.ten,
                         type: item.idLoaiTaiSan?.type
                     },
+                    linkHopDong: item.status == 6 ? "https://danhgiaxe.edu.vn/upload/2025/01/meme-bua-038.webp" : undefined,
                     idLoaiTaiSan: undefined,
                     }))
                 );
