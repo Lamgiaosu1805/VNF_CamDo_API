@@ -31,8 +31,9 @@ const YeuCauVayVonController = {
     },
     getDanhSachYeuCauVayVon: async (req, res, next) => {
         try {
+            const {status} = req.query
             const listData = await YeuCauVayVonModel
-                .find({customerId: req.user.id})
+                .find({customerId: req.user.id, status: status})
                 .populate("idLoaiTaiSan").sort({ createdAt: -1 })
                 .select("-idNguoiPheDuyet -idNguoiGiaiNgan")
                 .lean()
@@ -47,11 +48,14 @@ const YeuCauVayVonController = {
                     idLoaiTaiSan: undefined,
                     }))
                 );
-
-            res.json(SuccessResponse({
+            var response = {
                 message: "Lấy danh sách yêu cầu thành công",
                 data: listData
-            }))
+            }
+            if(status == 6 && listData.length > 0) {
+                response.linkHopDong = "https://danhgiaxe.edu.vn/upload/2025/01/meme-bua-038.webp"
+            } 
+            res.json(SuccessResponse(response))
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("32"))
