@@ -187,6 +187,17 @@ const YeuCauVayVonController = {
                 });
             }
             response = await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
+            try {
+                //Thiếu create Noti để sau
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Yêu cầu vay vốn mã ${yeuCau.maYeuCau} đã được đồng ý giải ngân. Vui lòng vào app ký hợp đồng để giải ngân`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: yeuCau.customerId})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            } catch (error) {
+                console.log(error)
+            }
             res.json(SuccessResponse({
                 message: "Đã đồng ý giải ngân, hợp đồng đã được gửi",
             }));
@@ -194,19 +205,7 @@ const YeuCauVayVonController = {
             console.log(error)
             res.json(FailureResponse("41", error))
         }
-        try {
-            if(response) {
-                //Thiếu create Noti để sau
-                const notification = {
-                    title: "X-FINANCE",
-                    content: `Yêu cầu vay vốn mã ${response.maYeuCau} đã được đồng ý giải ngân. Vui lòng vào app ký hợp đồng để giải ngân`
-                }
-                const notificationToken = await NotificationTokenModel.findOne({userId: response.customerId})
-                sendNotification([notificationToken.token], notification.title, notification.content)
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        
     }
 
 }
