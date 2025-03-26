@@ -88,6 +88,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Số hợp đồng trong kỳ vay đã tồn tại`;
         case "44":
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách khách hàng`;
+        case "45":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách khoản vay`;
     
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";

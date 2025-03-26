@@ -7,6 +7,7 @@ const KhoanVay = new Schema({
     customerId: { type: String, required: true },
     maYeuCau: { type: String, required: true },
     chiTietKhoanVay: {type: Object, required: true}, // Bao gồm các loại phí, tổng số tiền, lãi xuất ...
+    status: {type: Boolean, default: false}, //Trạng thái true: Đã thanh toán, false: Đang hoạt động
     isDelete: { type: Boolean, default: false },
     createdAt: {
         type: String,
