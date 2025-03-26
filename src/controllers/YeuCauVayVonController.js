@@ -78,23 +78,14 @@ const YeuCauVayVonController = {
         }
     },
     thamDinh: async (req, res) => {
-        var response
         try {
             const user = req.user
             const {idYeuCau, giaTriThamDinh} = req.body
-            response = await YeuCauVayVonModel.findByIdAndUpdate(idYeuCau, {status: 2, idNguoiThamDinh: user.id, giaTriSauThamDinh: giaTriThamDinh})
+            const response = await YeuCauVayVonModel.findByIdAndUpdate(idYeuCau, {status: 2, idNguoiThamDinh: user.id, giaTriSauThamDinh: giaTriThamDinh})
             if(!response) {
                 return res.json(FailureResponse("35"))
             }
-            res.json(SuccessResponse({
-                message: "Đã thẩm định"
-            }))
-        } catch (error) {
-            console.log(error)
-            res.json(FailureResponse("34", error))
-        }
-        try {
-            if(response) {
+            try {
                 //Thiếu create Noti để sau
                 const notification = {
                     title: "X-FINANCE",
@@ -102,9 +93,15 @@ const YeuCauVayVonController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: response.customerId})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+            } catch (error) {
+                console.log(error)
             }
+            res.json(SuccessResponse({
+                message: "Đã thẩm định"
+            }))
         } catch (error) {
             console.log(error)
+            res.json(FailureResponse("34", error))
         }
     },
     tinhTien: (req, res) => {
