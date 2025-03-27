@@ -203,7 +203,9 @@ const YeuCauVayVonController = {
             res.json(FailureResponse("41", error))
         }
         
+    },
+    huyYeuCau: async (req, res) => {
+        
     }
-
 }
 module.exports = YeuCauVayVonController
