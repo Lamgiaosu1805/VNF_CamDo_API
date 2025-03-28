@@ -90,7 +90,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách khách hàng`;
         case "45":
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách khoản vay`;
-    
+        case "46":
+            return `Error: ${errorCode}, Có lỗi khi huỷ yêu cầu gọi vốn`;
+        case "47":
+            return `Error: ${errorCode}, Lý do huỷ không được bỏ trống`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

@@ -17,5 +17,6 @@ router.get('/getDanhSachYCAdmin', auth.verifyTokenAdmin, YeuCauVayVonController.
 //customer
 router.post('/guiYeuCau', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, uploadHandler, processImages, YeuCauVayVonController.guiYeuCauVayVon);
 router.get('/getDanhSach', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, YeuCauVayVonController.getDanhSachYeuCauVayVon);
+router.post('/huyYeuCau', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, YeuCauVayVonController.huyYeuCau);
 
 module.exports = router;
