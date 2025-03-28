@@ -6,7 +6,7 @@ const KyVayModel = require("../models/KyVayModel");
 const KhoanVayModel = require("../models/KhoanVayModel");
 const CustomerModel = require("../models/CustomerModel");
 const NotificationTokenModel = require("../models/NotificationTokenModel");
-const { sendNotification } = require("../utils/Tools");
+const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools");
 
 const HopDongController = {
     kyHopDong: async(req, res) => {
@@ -68,7 +68,7 @@ const HopDongController = {
                 //Thiếu create Noti để sau
                 const notification = {
                     title: "X-FINANCE",
-                    content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản.`
+                    content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)}`
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customerId})
                 sendNotification([notificationToken], notification.title, notification.content)
