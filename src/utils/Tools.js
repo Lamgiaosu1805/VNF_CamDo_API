@@ -125,4 +125,12 @@ const sendNotification = (listToken, title, content) => {
     })();
 }
 
-module.exports = { sendNotification }
+const formatMoney = (money) => {
+  return money.toLocaleString("de-DE")
+}
+
+const hideUsername = (username) => {
+  return "xxx" + username.substring(5);
+}
+
+module.exports = { sendNotification, formatMoney, hideUsername }

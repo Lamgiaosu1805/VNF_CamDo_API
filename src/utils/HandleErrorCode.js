@@ -94,6 +94,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi huỷ yêu cầu gọi vốn`;
         case "47":
             return `Error: ${errorCode}, Lý do huỷ không được bỏ trống`;
+        case "48":
+            return `Error: ${errorCode}, Ảnh và số tiền không được để rỗng`;
+        case "49":
+            return `Error: ${errorCode}, Có lỗi khi nạp tiền`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
