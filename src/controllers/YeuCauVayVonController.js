@@ -207,11 +207,11 @@ const YeuCauVayVonController = {
     huyYeuCau: async (req, res) => {
         try {
             const {idYeuCau, lyDoHuy} = req.body
-            if(lyDoHuy == "") {
+            if(lyDoHuy == "" || !lyDoHuy) {
                 return res.json(FailureResponse("47"))
             }
             const yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, customerId: req.user.id})
-            if(!yeuCau || yeuCau.status == 4) {
+            if(!yeuCau || yeuCau.status == 4 || yeuCau.status == 5) {
                 return res.json(FailureResponse("35"))
             }
             await yeuCau.updateOne({status: 5, lyDoHuy: lyDoHuy})
