@@ -6,12 +6,14 @@ const YeuCauVayVonController = require('../controllers/YeuCauVayVonController');
 const CustomerController = require('../controllers/CustomerController');
 const NotificationController = require('../controllers/NotificationController');
 const router = express.Router()
+const multer = require('multer');
+const upload = multer();
 
 //admin
 router.get('/danhSachKhachHang', auth.verifyTokenAdmin, CustomerController.layDanhSachKhachHang);
 
 //customer
-router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.ekyc);
+router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, upload.none(), CustomerController.ekyc);
 router.post('/saveDeviceToken', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, NotificationController.saveToken);
 router.get('/getCustomerInfo', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, CustomerController.getCustomerInfo);
 router.post('/pushLocation', validateDevice.checkSameDeviceId, CustomerController.pushLocation);

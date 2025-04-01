@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose")
 const CustomerHistoryLocationModel = require("../models/CustomerHistoryLocationModel")
 const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
@@ -6,12 +7,31 @@ const { sendNotification, formatMoney, hideUsername } = require("../utils/Tools"
 
 const CustomerController = {
     ekyc: async(req, res, next) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
         try {
-            await CustomerModel.findByIdAndUpdate(req.user.id, {isEkyc: true})
+            const {base64String, backImage, frontImage} = req.body
+            const decodedString = Buffer.from(base64String, 'base64').toString('utf-8')
+            const jsonData = JSON.parse(decodedString)
+            const fullname = jsonData.object.name
+            const birth = jsonData.object.birth_day
+            const cccd = jsonData.object.id
+            const diaChiThuongTru = jsonData.object.recent_location.replaceAll(/\n/g, ", ")
+            const gioiTinh = jsonData.object.gender
+            const customer = await CustomerModel.findOne({cccd: cccd})
+            if(customer && (customer._id != req.user.id)) {
+                return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
+            }
+
+            await CustomerModel.findByIdAndUpdate(req.user.id, {isEkyc: true, fullname, birth, cccd, diaChiThuongTru, gioiTinh})
+            await session.commitTransaction();
+            session.endSession();
             res.json(SuccessResponse({
-                message: "EKYC thành công"
+                message: "EKYC thành công",
             }))
         } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
             console.log(error)
             res.json(FailureResponse("29", error))
         }
