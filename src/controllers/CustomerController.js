@@ -45,12 +45,40 @@ const CustomerController = {
                 return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
             }
 
-            await CustomerModel.findByIdAndUpdate(req.user.id, {isEkyc: true, fullname, birth, cccd, diaChiThuongTru, gioiTinh, ngayCapCCCD, noiCapCCCD, ngayHetHanCCCD})
+            await CustomerModel.findByIdAndUpdate(
+                req.user.id, 
+                {
+                    isEkyc: true, 
+                    fullname, 
+                    birth, 
+                    cccd, 
+                    diaChiThuongTru, 
+                    gioiTinh, 
+                    ngayCapCCCD, 
+                    noiCapCCCD, 
+                    ngayHetHanCCCD,
+                    cccdFrontImg: req.uploadedFiles.front_id,
+                    cccdBackImg: req.uploadedFiles.back_id,
+                    anhChanDung: req.uploadedFiles.portrait
+                }
+            )
             await session.commitTransaction();
             session.endSession();
             res.json(SuccessResponse({
                 message: "EKYC thành công",
-                files: req.uploadedFiles
+                data: {
+                    fullname, 
+                    birth, 
+                    cccd, 
+                    diaChiThuongTru, 
+                    gioiTinh, 
+                    ngayCapCCCD, 
+                    noiCapCCCD, 
+                    ngayHetHanCCCD,
+                    cccdFrontImg: req.uploadedFiles.front_id,
+                    cccdBackImg: req.uploadedFiles.back_id,
+                    anhChanDung: req.uploadedFiles.portrait
+                }
             }))
         } catch (error) {
             await session.abortTransaction();
