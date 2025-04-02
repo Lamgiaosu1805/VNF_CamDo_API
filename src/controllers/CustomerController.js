@@ -40,10 +40,10 @@ const CustomerController = {
             const noiCapCCCD = jsonData.object.issue_place.replaceAll(/\n/g, ", ")
             const ngayHetHanCCCD = jsonData.object.valid_date
             const customer = await CustomerModel.findOne({cccd: cccd})
-            if(customer && (customer._id != req.user.id)) {
-                deleteUploadedFiles(req.files); 
-                return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
-            }
+            // if(customer && (customer._id != req.user.id)) {
+            //     deleteUploadedFiles(req.files); 
+            //     return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
+            // }
 
             await CustomerModel.findByIdAndUpdate(
                 req.user.id, 
