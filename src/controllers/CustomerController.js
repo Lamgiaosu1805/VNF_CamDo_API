@@ -10,7 +10,7 @@ const CustomerController = {
         const session = await mongoose.startSession()
         session.startTransaction()
         try {
-            const {base64String, backImage, frontImage} = req.body
+            const {base64String} = req.body
             const decodedString = Buffer.from(base64String, 'base64').toString('utf-8')
             const jsonData = JSON.parse(decodedString)
             const fullname = jsonData.object.name
