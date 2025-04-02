@@ -4,12 +4,23 @@ const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { sendNotification, formatMoney, hideUsername } = require("../utils/Tools")
+const fs = require('fs');
+
+const deleteUploadedFiles = (files) => {
+    if (!files) return;
+    Object.values(files).forEach((filePath) => {
+        if (filePath && fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath); // Xóa file
+        }
+    });
+};
 
 const CustomerController = {
     ekyc: async(req, res, next) => {
         const session = await mongoose.startSession()
         session.startTransaction()
         try {
+        
             const {base64String} = req.body
             const decodedString = Buffer.from(base64String, 'base64').toString('utf-8')
             const jsonData = JSON.parse(decodedString)
@@ -22,7 +33,8 @@ const CustomerController = {
             const noiCapCCCD = jsonData.object.issue_place.replaceAll(/\n/g, ", ")
             const ngayHetHanCCCD = jsonData.object.valid_date
             const customer = await CustomerModel.findOne({cccd: cccd})
-            if(customer && (customer._id != req.user.id)) {
+            if(customer && (customer._id == req.user.id)) {
+                deleteUploadedFiles(req.uploadedFiles);
                 return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
             }
 
@@ -31,10 +43,12 @@ const CustomerController = {
             session.endSession();
             res.json(SuccessResponse({
                 message: "EKYC thành công",
+                files: req.uploadedFiles
             }))
         } catch (error) {
             await session.abortTransaction();
             session.endSession();
+            deleteUploadedFiles(req.uploadedFiles);
             console.log(error)
             res.json(FailureResponse("29", error))
         }
