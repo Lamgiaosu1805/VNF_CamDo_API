@@ -4,6 +4,23 @@ const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { sendNotification, formatMoney, hideUsername } = require("../utils/Tools")
+const fs = require('fs');
+
+const deleteUploadedFiles = (files) => {
+    if (!files) return;
+    Object.values(files).forEach((fileArray) => {
+        fileArray.forEach((file) => {
+            const filePath = file.path; // Đảm bảo lấy đường dẫn đúng từ file object
+            if (fs.existsSync(filePath)) {
+                console.log(`Đang xóa file: ${filePath}`);
+                fs.unlinkSync(filePath); // Xóa file
+                console.log(`Đã xóa file: ${filePath}`);
+            } else {
+                console.log(`Không tìm thấy file: ${filePath}`);
+            }
+        });
+    });
+};
 
 const CustomerController = {
     ekyc: async(req, res, next) => {
@@ -24,6 +41,7 @@ const CustomerController = {
             const ngayHetHanCCCD = jsonData.object.valid_date
             const customer = await CustomerModel.findOne({cccd: cccd})
             if(customer && (customer._id != req.user.id)) {
+                deleteUploadedFiles(req.files); 
                 return res.json(FailureResponse("29", "CCCD đã được sử dụng"))
             }
 
@@ -37,6 +55,7 @@ const CustomerController = {
         } catch (error) {
             await session.abortTransaction();
             session.endSession();
+            deleteUploadedFiles(req.files);
             console.log(error)
             res.json(FailureResponse("29", error))
         }
