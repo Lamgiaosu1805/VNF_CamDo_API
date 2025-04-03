@@ -98,6 +98,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Ảnh và số tiền không được để rỗng`;
         case "49":
             return `Error: ${errorCode}, Có lỗi khi nạp tiền`;
+        case "50":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách ngân hàng`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
