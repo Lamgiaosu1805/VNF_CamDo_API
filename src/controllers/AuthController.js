@@ -88,6 +88,9 @@ const AuthController = {
             else if(type == "signUp") {
                 await redis.set(`${username}:validateDevice`, deviceId, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
             }
+            else if(type == "addTKNH") { //KEY OTP ADD Tài khoản ngân hàng
+                await redis.set(`${username}:addTKNH`, otp, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
+            }
             else {
                 console.log(`${type}: type không xác định`)
                 return res.json(FailureResponse("07"))
@@ -205,7 +208,8 @@ const AuthController = {
             await redis.set(key, otp, "EX", time_expr); // Lưu OTP vào Redis, hết hạn sau 60 giây
             console.log(key)
             res.json(SuccessResponse({
-                message: "Đã gửi OTP"
+                message: "Đã gửi OTP",
+                exprTime: time_expr
             }))
         } catch (error) {
             console.log(error)
@@ -233,6 +237,22 @@ const AuthController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("18", error))
+        }
+    },
+    genOTP: async (req, res) => {
+        try {
+            const {typeOTP} = req.body
+            const OTP = "000000"
+            const key = `otp:${req.user.username}:${typeOTP}:${req.deviceId}`;
+            const time_expr = 60
+            await redis.set(key, OTP, "EX", time_expr)
+            res.json(SuccessResponse({
+                message: "OTP đã được gửi",
+                exprTime: time_expr
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("52", error))
         }
     }
 }
