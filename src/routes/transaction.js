@@ -9,5 +9,6 @@ const router = express.Router()
 //customer
 router.get('/getListBank', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, TransactionController.getListBank);
 router.post('/addTKLienKet', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, TransactionController.addTKLienKet);
+router.post('/napTien', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, TransactionController.napTien);
 
 module.exports = router;

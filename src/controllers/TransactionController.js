@@ -1,7 +1,10 @@
 const redis = require("../config/connectRedis")
 const BankInfoModel = require("../models/BankInfoModel")
+const CustomerModel = require("../models/CustomerModel")
+const NotificationTokenModel = require("../models/NotificationTokenModel")
 const TKLienKetModel = require("../models/TKLienKetModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
+const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools")
 
 const TransactionController = {
     getListBank: async (req, res) => {
@@ -68,6 +71,39 @@ const TransactionController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("51", error))
+        }
+    },
+    napTien: async (req, res) => {
+        try {
+            const {image, soTienNap} = req.body
+            if(!Number.isInteger(soTienNap)) {
+                return res.json(FailureResponse("49", "Số tiền nạp không đúng định dạng"))
+            }
+            if(!image || !soTienNap) {
+                res.json(FailureResponse("48"))
+            }
+            else {
+                const customer = await CustomerModel.findById(req.user.id)
+                const soDuMoi = customer.soDuKhaDung + soTienNap
+                await customer.updateOne({soDuKhaDung: soDuMoi})
+                try {
+                    const notification = {
+                        title: "X-FINANCE",
+                        content: `Tài khoản ${hideUsername(customer.username)} đã nạp thành công số tiền: ${formatMoney(soTienNap)} VNĐ\nSố dư khả dụng: ${formatMoney(soDuMoi)} VNĐ`
+                    }
+                    const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
+                    sendNotification([notificationToken.token], notification.title, notification.content)
+                } catch (error) {
+                    console.log(error)
+                }
+                res.json(SuccessResponse({
+                    message: "Nạp tiền thành công",
+                    soDuKhaDungMoi: soDuMoi
+                }))
+            }
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("49", error))
         }
     }
 }
