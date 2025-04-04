@@ -3,6 +3,7 @@ const BankInfoModel = require("../models/BankInfoModel")
 const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const TKLienKetModel = require("../models/TKLienKetModel")
+const YeuCauRutTienModel = require("../models/YeuCauRutTienModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools")
 
@@ -104,6 +105,37 @@ const TransactionController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("49", error))
+        }
+    },
+    rutTien: async (req, res) => {
+        try {
+            const {otp, idTKLK, soTienRut} = req.body
+            const key = `${req.user.username}:rutTien`
+            const value = await redis.get(key);
+            if (!value || value !== otp) {
+                return res.json(FailureResponse("11"))
+            }
+            if(!Number.isInteger(soTienRut)) {
+                return res.json(FailureResponse("53", "Số tiền rút không đúng định dạng"))
+            }
+            const yeuCauRutTien = new YeuCauRutTienModel({
+                idTKLK,
+                customerId: req.user.id,
+                soTienRut
+            })
+            const customer = await CustomerModel.findById(req.user.id)
+            const soDuKhaDungConLai = customer.soDuKhaDung - soTienRut
+            if(soDuKhaDungConLai < 0) {
+                return res.json(FailureResponse("53", "Số dư khả dụng không đủ"))
+            }
+            await yeuCauRutTien.save()
+            res.json(SuccessResponse({
+                message: "Tạo yêu cầu rút tiền thành công",
+                soDuKhaDungConLai: soDuKhaDungConLai
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("53", error))
         }
     }
 }

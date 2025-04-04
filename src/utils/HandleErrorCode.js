@@ -104,6 +104,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi liên kết tài khoản ngân hàng`;
         case "52":
             return `Error: ${errorCode}, Có lỗi khi generate OTP`;
+        case "53":
+            return `Error: ${errorCode}, Có lỗi khi rút tiền`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
