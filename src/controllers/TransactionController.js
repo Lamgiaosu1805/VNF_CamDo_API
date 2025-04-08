@@ -125,13 +125,13 @@ const TransactionController = {
             if(!tklk) {
                 return res.json(FailureResponse("53", "Tài khoản liên kết không tồn tại"))
             }
-            
+            const customer = await CustomerModel.findById(req.user.id)
             const yeuCauRutTien = new YeuCauRutTienModel({
                 idTKLK,
                 customerId: req.user.id,
-                soTienRut
+                soTienRut,
+                hoTenCustomer: customer.fullname
             })
-            const customer = await CustomerModel.findById(req.user.id)
             const soDuKhaDungConLai = customer.soDuKhaDung - soTienRut
             if(soDuKhaDungConLai < 0) {
                 return res.json(FailureResponse("53", "Số dư khả dụng không đủ"))
@@ -159,6 +159,23 @@ const TransactionController = {
             session.endSession();
             console.log(error)
             res.json(FailureResponse("53", error))
+        }
+    },
+    layDSYeuCauRT: async (req, res) => {
+        try {
+            const {customerName} = req.query
+            const listRT = await YeuCauRutTienModel.find({
+                $or: [
+                    { hoTenCustomer: { $regex: customerName || "", $options: "i" } },
+                ]
+            })
+            res.json(SuccessResponse({
+                message: "Lấy danh sách yêu cầu rút tiền thành công",
+                data: listRT
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("54", error))
         }
     }
 }

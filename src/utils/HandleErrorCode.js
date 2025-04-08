@@ -106,6 +106,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi generate OTP`;
         case "53":
             return `Error: ${errorCode}, Có lỗi khi rút tiền`;
+        case "54":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách yêu cầu rút tiền`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
