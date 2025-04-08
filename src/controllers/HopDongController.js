@@ -61,7 +61,7 @@ const HopDongController = {
                 await KyVayModel.insertMany(kyVay, {session})
                 // return res.json(FailureResponse("43"))
             }
-            response = await yeuCau.updateOne({status: 4})
+            response = await yeuCau.updateOne({status: 4},{session})
             await session.commitTransaction();
             session.endSession();
             try {

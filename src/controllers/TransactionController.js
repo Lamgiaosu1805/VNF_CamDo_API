@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose")
 const redis = require("../config/connectRedis")
 const BankInfoModel = require("../models/BankInfoModel")
 const CustomerModel = require("../models/CustomerModel")
@@ -108,6 +109,8 @@ const TransactionController = {
         }
     },
     rutTien: async (req, res) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
         try {
             const {otp, idTKLK, soTienRut} = req.body
             const key = `${req.user.username}:rutTien`
@@ -118,6 +121,11 @@ const TransactionController = {
             if(!Number.isInteger(soTienRut)) {
                 return res.json(FailureResponse("53", "Số tiền rút không đúng định dạng"))
             }
+            const tklk = await TKLienKetModel.findOne({_id: idTKLK, customerId: req.user.id})
+            if(!tklk) {
+                return res.json(FailureResponse("53", "Tài khoản liên kết không tồn tại"))
+            }
+            
             const yeuCauRutTien = new YeuCauRutTienModel({
                 idTKLK,
                 customerId: req.user.id,
@@ -128,12 +136,27 @@ const TransactionController = {
             if(soDuKhaDungConLai < 0) {
                 return res.json(FailureResponse("53", "Số dư khả dụng không đủ"))
             }
-            await yeuCauRutTien.save()
+            await yeuCauRutTien.save({session})
+            await customer.updateOne({soDuKhaDung: soDuKhaDungConLai}, {session})
+            try {
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Tài khoản ${hideUsername(customer.username)} đã yêu cầu rút thành công số tiền: ${formatMoney(soTienRut)} VNĐ, tiền sẽ về tài khoản ngân hàng của bạn trong 1 ngày làm việc.\nSố dư khả dụng: ${formatMoney(soDuKhaDungConLai)} VNĐ`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            } catch (error) {
+                console.log(error)
+            }
+            await session.commitTransaction();
+            session.endSession();
             res.json(SuccessResponse({
                 message: "Tạo yêu cầu rút tiền thành công",
                 soDuKhaDungConLai: soDuKhaDungConLai
             }))
         } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
             console.log(error)
             res.json(FailureResponse("53", error))
         }
