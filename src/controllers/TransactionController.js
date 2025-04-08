@@ -246,5 +246,17 @@ const TransactionController = {
             res.json(FailureResponse("56", error))
         }
     },
+    dsTKLK: async (req, res) => {
+        try {
+            const dsTKLK = await TKLienKetModel.find({customerId: req.user.id, isDelete: false})
+            res.json(SuccessResponse({
+                message: "Lấy danh sách tài khoản liên kết thành công",
+                data: dsTKLK
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("57", error))
+        }
+    }
 }
 module.exports = TransactionController

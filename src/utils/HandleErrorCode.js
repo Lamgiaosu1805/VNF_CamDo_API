@@ -112,6 +112,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi phê duyệt yêu cầu rút tiền`;
         case "56":
             return `Error: ${errorCode}, Có lỗi khi từ chối yêu cầu rút tiền`;
+        case "57":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách tài khoản ngân hàng liên kết`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
