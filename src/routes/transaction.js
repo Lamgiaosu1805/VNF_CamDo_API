@@ -6,6 +6,8 @@ const router = express.Router()
 
 //admin
 router.get('/DSYCRutTien', auth.verifyTokenAdmin, TransactionController.layDSYeuCauRT);
+router.post('/pheDuyetYCRutTien', auth.verifyTokenAdmin, TransactionController.pheDuyetYeuCauRT);
+router.post('/tuChoiYCRutTien', auth.verifyTokenAdmin, TransactionController.tuChoiYeuCauRT);
 
 //customer
 router.get('/getListBank', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, TransactionController.getListBank);

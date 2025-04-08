@@ -9,6 +9,7 @@ const YeuCauRutTien = new Schema({
     idTKLK: { type: String, required: true },
     status: { type: Number, required: true, default: 1 },// 1: đang chờ phê duyệt, 2: Đã phê duyệt, 3: Đã từ chối
     idNguoiPheDuyet: {type: String, default: ""},
+    lyDoTuChoi: { type: String },
     isDelete: { type: Boolean, default: false },
     createdAt: {
         type: String,

@@ -178,6 +178,73 @@ const TransactionController = {
             console.log(error)
             res.json(FailureResponse("54", error))
         }
-    }
+    },
+    pheDuyetYeuCauRT: async (req, res) => {
+        try {
+            const {idYeuCauRT} = req.body
+            const yeuCauRT = await YeuCauRutTienModel.findOne({_id: idYeuCauRT, status: 1})
+            
+            if(!yeuCauRT) {
+                console.log(yeuCauRT, "YCRT")
+                return res.json(FailureResponse("55", "Không tìm thấy yêu cầu rút tiền"))
+            }
+            const customer = await CustomerModel.findById(yeuCauRT.customerId)
+            await yeuCauRT.updateOne({status: 2, idNguoiPheDuyet: req.user.id})
+            try {
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Yêu cầu rút tiền với số tiền ${formatMoney(yeuCauRT.soTienRut)} VNĐ của bạn đã được phê duyệt.`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: customer.id})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            } catch (error) {
+                console.log(error)
+            }
+            res.json(SuccessResponse({
+                message: "Đã phê duyệt yêu cầu rút tiền"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("55", error))
+        }
+    },
+    tuChoiYeuCauRT: async (req, res) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
+        try {
+            const {idYeuCauRT, lyDoTuChoi} = req.body
+            if(!lyDoTuChoi) {
+                return res.json(FailureResponse("56", "Lý do từ chối không được để trống"))
+            }
+            const yeuCauRT = await YeuCauRutTienModel.findOne({_id: idYeuCauRT, status: 1})
+            if(!yeuCauRT) {
+                console.log(yeuCauRT, "YCRT")
+                return res.json(FailureResponse("56", "Không tìm thấy yêu cầu rút tiền"))
+            }
+            const customer = await CustomerModel.findById(yeuCauRT.customerId)
+            await customer.updateOne({soDuKhaDung: customer.soDuKhaDung + yeuCauRT.soTienRut}, {session})
+            await yeuCauRT.updateOne({status: 3, idNguoiPheDuyet: req.user.id, lyDoTuChoi: lyDoTuChoi}, {session})
+            try {
+                const notification = {
+                    title: "X-FINANCE",
+                    content: `Yêu cầu rút tiền với số tiền ${formatMoney(yeuCauRT.soTienRut)} VNĐ của bạn đã bị từ chối với lí do: ${lyDoTuChoi}.\nSố tiền đã được trả về tài khoản X-FINANCE của bạn\nSố dư khả dụng: ${formatMoney(customer.soDuKhaDung + yeuCauRT.soTienRut)} VNĐ`
+                }
+                const notificationToken = await NotificationTokenModel.findOne({userId: customer.id})
+                sendNotification([notificationToken.token], notification.title, notification.content)
+            } catch (error) {
+                console.log(error)
+            }
+            await session.commitTransaction();
+            session.endSession();
+            res.json(SuccessResponse({
+                message: "Đã từ chối yêu cầu rút tiền"
+            }))
+        } catch (error) {
+            await session.commitTransaction();
+            session.endSession();
+            console.log(error)
+            res.json(FailureResponse("56", error))
+        }
+    },
 }
 module.exports = TransactionController
