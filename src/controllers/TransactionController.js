@@ -150,6 +150,7 @@ const TransactionController = {
             }
             await session.commitTransaction();
             session.endSession();
+            await redis.del(key)
             res.json(SuccessResponse({
                 message: "Tạo yêu cầu rút tiền thành công",
                 soDuKhaDungConLai: soDuKhaDungConLai
