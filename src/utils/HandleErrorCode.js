@@ -39,11 +39,11 @@ const HandleErrorCode = (errorCode) => {
         case "19":
             return `Error: ${errorCode}, Có lỗi trong quá trình thêm loại tài sản`;
         case "20":
-            return `Error: ${errorCode}, Token Invalid`;
+            return `Error: ${errorCode}, Token Invalid, vui lòng đăng nhập lại`;
         case "21":
             return `Error: ${errorCode}, Có lỗi khi verify token`;
         case "22":
-            return `Error: ${errorCode}, Not Authenticated`;
+            return `Error: ${errorCode}, Not Authenticated, vui lòng đăng nhập lại`;
         case "23":
             return `Error: ${errorCode}, Lấy danh sách tài sản lỗi`;
         case "24":
