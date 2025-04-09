@@ -248,10 +248,29 @@ const TransactionController = {
     },
     dsTKLK: async (req, res) => {
         try {
+            var data;
+            const dstkRedis = await redis.get("dstkRedis")
+            if(!dstkRedis) {
+                console.log("GET DSTKLK: USE DATABASE")
+                data = await BankInfoModel.find()
+                await redis.set("dstkRedis", JSON.stringify(data), "EX", 3600);
+            }
+            else {
+                console.log("GET DSTKLK: USE REDIS DATA")
+                data = JSON.parse(dstkRedis)
+            }
             const dsTKLK = await TKLienKetModel.find({customerId: req.user.id, isDelete: false})
+            const list = dsTKLK.map((e) => {
+                const item = data.find((ele) => ele.bank_code == e.bankCode)
+                const { iconUrl, ...rest} = e._doc
+                return {
+                    ...rest,
+                    iconUrl: item.baseUrl + item.icon || ""
+                }
+            })
             res.json(SuccessResponse({
                 message: "Lấy danh sách tài khoản liên kết thành công",
-                data: dsTKLK
+                data: list
             }))
         } catch (error) {
             console.log(error)
