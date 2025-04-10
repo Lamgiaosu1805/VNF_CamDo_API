@@ -138,7 +138,18 @@ const YeuCauVayVonController = {
     getYCGoiVonAdmin: async (req, res) => {
         try {
             const {status} = req.query
-            const danhSachYc = await YeuCauVayVonModel.find({status: status})
+            const danhSachYc = await YeuCauVayVonModel.find({status: status}).populate('customerId').lean()
+            .then((results) =>
+                results.map((item) => ({
+                ...item,
+                customerInfo: {
+                    fullname: item.customerId?.fullname || "",
+                    cccd: item.customerId?.cccd || "",
+                    phoneNumber: item.customerId?.username
+                },
+                customerId: undefined
+            }))
+            );
             res.json(SuccessResponse({
                 message: "Lấy danh sách thành công",
                 data: danhSachYc

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 const moment = require('moment-timezone')
 
 const YeuCauVayVon = new Schema({
-    customerId: { type: String, required: true },
+    customerId: { type: String, required: true, ref: "customer" },
     maYeuCau: { type: String, required: true, unique: true },
     idLoaiTaiSan: { type: String, required: true, ref: "loaiTaiSanTheChap" },
     nhanHieu: { type: String },
