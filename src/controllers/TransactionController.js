@@ -319,7 +319,7 @@ const TransactionController = {
     getLSGiaoDich: async (req, res) => {
         try {
             const {customerId} = req.params
-            const ls = await LichSuGiaoDichModel.find({customerId: customerId || req.user.id})
+            const ls = await LichSuGiaoDichModel.find({customerId: customerId || req.user.id}).sort({ createdAt: -1 })
             res.json(SuccessResponse({
                 message: "Lấy lịch sử giao dịch thành công",
                 data: ls
