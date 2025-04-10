@@ -118,6 +118,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy lịch sử giao dịch`;
         case "59":
             return `Error: ${errorCode}, Có lỗi khi thay đổi mật khẩu`;
+        case "60":
+            return `Error: ${errorCode}, Sai mật khẩu`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

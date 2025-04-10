@@ -267,7 +267,7 @@ const AuthController = {
                 customer.password
             )
             if(!validPassword) {
-                return res.json(FailureResponse("13", "Mật khẩu hiện tại không đúng"))
+                return res.json(FailureResponse("60"))
             }
             const salt = await bcrypt.genSalt(10)
             const hashedNewPassword = await bcrypt.hash(newPassword, salt)
