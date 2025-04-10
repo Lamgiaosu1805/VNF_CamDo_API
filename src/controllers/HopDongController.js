@@ -81,7 +81,7 @@ const HopDongController = {
                     content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)}`
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customerId})
-                sendNotification([notificationToken], notification.title, notification.content)
+                sendNotification([notificationToken.token], notification.title, notification.content)
             } catch (error) {
                 console.log(error)
             }
