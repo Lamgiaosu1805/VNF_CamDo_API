@@ -78,7 +78,7 @@ const HopDongController = {
                 //Thiếu create Noti để sau
                 const notification = {
                     title: "X-FINANCE",
-                    content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)}`
+                    content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)} VNĐ`
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customerId})
                 sendNotification([notificationToken.token], notification.title, notification.content)
