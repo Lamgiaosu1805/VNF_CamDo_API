@@ -116,6 +116,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách tài khoản ngân hàng liên kết`;
         case "58":
             return `Error: ${errorCode}, Có lỗi khi lấy lịch sử giao dịch`;
+        case "59":
+            return `Error: ${errorCode}, Có lỗi khi thay đổi mật khẩu`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

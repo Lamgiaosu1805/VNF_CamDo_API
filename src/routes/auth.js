@@ -12,6 +12,7 @@ router.post('/login', validateDevice.checkSameDeviceId, AuthController.login);
 router.post('/forgotPassword', validateDevice.checkNullDeviceId, AuthController.forgotPassword);
 router.post('/resetPassword', validateDevice.checkSameDeviceId, AuthController.resetPassword);
 router.post('/generateOTP', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, AuthController.genOTP);
+router.post('/changePassword', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, AuthController.changePassword);
 
 // router.post('/createSystemAccount', AuthController.createAccountAdmin);
 router.post('/loginAdmin', AuthController.loginAdmin);

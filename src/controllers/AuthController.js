@@ -257,6 +257,28 @@ const AuthController = {
             console.log(error)
             res.json(FailureResponse("52", error))
         }
+    },
+    changePassword: async (req, res) => {
+        try {
+            const {oldPassword, newPassword} = req.body
+            const {customer} = req
+            const validPassword = await bcrypt.compare(
+                oldPassword,
+                customer.password
+            )
+            if(!validPassword) {
+                return res.json(FailureResponse("13", "Mật khẩu hiện tại không đúng"))
+            }
+            const salt = await bcrypt.genSalt(10)
+            const hashedNewPassword = await bcrypt.hash(newPassword, salt)
+            await CustomerModel.updateOne({username: customer.username}, {password: hashedNewPassword})
+            res.json(SuccessResponse({
+                message: "Đổi mật khẩu thành công"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("59", error))
+        }
     }
 }
 
