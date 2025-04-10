@@ -53,7 +53,7 @@ const HopDongController = {
                 chiTietKhoanVay: chiTietKhoanVay
             })
             await newKhoanVay.save({session})
-            const customer = await CustomerModel.findById(customerId)
+            const customer = req.customer
             const SDKhaDung = customer.soDuKhaDung || 0
             const SDmoi = SDKhaDung + chiTietKhoanVay.soTienDuocGiaiNgan
             await customer.updateOne({soDuKhaDung: SDmoi})

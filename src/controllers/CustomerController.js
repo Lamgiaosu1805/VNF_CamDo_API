@@ -90,10 +90,11 @@ const CustomerController = {
     },
     getCustomerInfo: async (req, res) => {
         try {
-            const customerInfo = await CustomerModel.findById(req.user.id).select("-password -firebaseToken")
+            const customerInfo = req.customer
+            const { password, firebaseToken, anhChanDung, cccdBackImg, cccdFrontImg, deviceId, ...cleanedUser} = customerInfo._doc;
             res.json(SuccessResponse({
                 message: "Lấy thông tin thành công",
-                data: customerInfo
+                data: cleanedUser
             }))
         } catch (error) {
             console.log(error)

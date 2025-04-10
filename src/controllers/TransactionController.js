@@ -90,7 +90,7 @@ const TransactionController = {
                 res.json(FailureResponse("48"))
             }
             else {
-                const customer = await CustomerModel.findById(req.user.id)
+                const customer = req.customer
                 const soDuMoi = customer.soDuKhaDung + soTienNap
                 await customer.updateOne({soDuKhaDung: soDuMoi})
                 const lsNap = new LichSuGiaoDichModel({
@@ -145,7 +145,7 @@ const TransactionController = {
                 session.endSession();
                 return res.json(FailureResponse("53", "Tài khoản liên kết không tồn tại"))
             }
-            const customer = await CustomerModel.findById(req.user.id)
+            const customer = req.customer
             const yeuCauRutTien = new YeuCauRutTienModel({
                 idTKLK,
                 customerId: req.user.id,
