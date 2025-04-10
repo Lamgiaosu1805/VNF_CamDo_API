@@ -7,6 +7,7 @@ const TKLienKetModel = require("../models/TKLienKetModel")
 const YeuCauRutTienModel = require("../models/YeuCauRutTienModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools")
+const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel")
 
 const TransactionController = {
     getListBank: async (req, res) => {
@@ -76,18 +77,30 @@ const TransactionController = {
         }
     },
     napTien: async (req, res) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
         try {
             const {image, soTienNap} = req.body
             if(!Number.isInteger(soTienNap)) {
+                session.endSession();
                 return res.json(FailureResponse("49", "Số tiền nạp không đúng định dạng"))
             }
             if(!image || !soTienNap) {
+                session.endSession();
                 res.json(FailureResponse("48"))
             }
             else {
                 const customer = await CustomerModel.findById(req.user.id)
                 const soDuMoi = customer.soDuKhaDung + soTienNap
                 await customer.updateOne({soDuKhaDung: soDuMoi})
+                const lsNap = new LichSuGiaoDichModel({
+                    customerId: req.user.id,
+                    soTienGiaoDich: soTienNap,
+                    tieuDeGiaoDich: "Nạp tiền",
+                    noiDungGiaoDich: "Nạp tiền vào tài khoản",
+                    type: 0,
+                })
+                await lsNap.save({session})
                 try {
                     const notification = {
                         title: "X-FINANCE",
@@ -98,12 +111,16 @@ const TransactionController = {
                 } catch (error) {
                     console.log(error)
                 }
+                await session.commitTransaction();
+                session.endSession();
                 res.json(SuccessResponse({
                     message: "Nạp tiền thành công",
                     soDuKhaDungMoi: soDuMoi
                 }))
             }
         } catch (error) {
+            await session.commitTransaction();
+            session.endSession();
             console.log(error)
             res.json(FailureResponse("49", error))
         }
@@ -116,13 +133,16 @@ const TransactionController = {
             const key = `${req.user.username}:rutTien`
             const value = await redis.get(key);
             if (!value || value !== otp) {
+                session.endSession();
                 return res.json(FailureResponse("11"))
             }
             if(!Number.isInteger(soTienRut)) {
+                session.endSession();
                 return res.json(FailureResponse("53", "Số tiền rút không đúng định dạng"))
             }
             const tklk = await TKLienKetModel.findOne({_id: idTKLK, customerId: req.user.id})
             if(!tklk) {
+                session.endSession();
                 return res.json(FailureResponse("53", "Tài khoản liên kết không tồn tại"))
             }
             const customer = await CustomerModel.findById(req.user.id)
@@ -134,10 +154,19 @@ const TransactionController = {
             })
             const soDuKhaDungConLai = customer.soDuKhaDung - soTienRut
             if(soDuKhaDungConLai < 0) {
+                session.endSession();
                 return res.json(FailureResponse("53", "Số dư khả dụng không đủ"))
             }
             await yeuCauRutTien.save({session})
             await customer.updateOne({soDuKhaDung: soDuKhaDungConLai}, {session})
+            const lsRut = new LichSuGiaoDichModel({
+                customerId: req.user.id,
+                tieuDeGiaoDich: "Yêu cầu rút tiền",
+                noiDungGiaoDich: "Rút tiền về tài khoản liên kết",
+                soTienGiaoDich: soTienRut,
+                type: 1
+            })
+            await lsRut.save({session})
             try {
                 const notification = {
                     title: "X-FINANCE",
@@ -214,16 +243,26 @@ const TransactionController = {
         try {
             const {idYeuCauRT, lyDoTuChoi} = req.body
             if(!lyDoTuChoi) {
+                session.endSession();
                 return res.json(FailureResponse("56", "Lý do từ chối không được để trống"))
             }
             const yeuCauRT = await YeuCauRutTienModel.findOne({_id: idYeuCauRT, status: 1})
             if(!yeuCauRT) {
+                session.endSession();
                 console.log(yeuCauRT, "YCRT")
                 return res.json(FailureResponse("56", "Không tìm thấy yêu cầu rút tiền"))
             }
             const customer = await CustomerModel.findById(yeuCauRT.customerId)
             await customer.updateOne({soDuKhaDung: customer.soDuKhaDung + yeuCauRT.soTienRut}, {session})
             await yeuCauRT.updateOne({status: 3, idNguoiPheDuyet: req.user.id, lyDoTuChoi: lyDoTuChoi}, {session})
+            const ls = new LichSuGiaoDichModel({
+                customerId: yeuCauRT.customerId,
+                tieuDeGiaoDich: "Trả lại tiền yêu cầu rút",
+                noiDungGiaoDich: `Từ chối yêu cầu rút tiền với lí do: ${lyDoTuChoi}`,
+                type: 0,
+                soTienGiaoDich: yeuCauRT.soTienRut
+            })
+            await ls.save({session})
             try {
                 const notification = {
                     title: "X-FINANCE",
@@ -275,6 +314,19 @@ const TransactionController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("57", error))
+        }
+    },
+    getLSGiaoDich: async (req, res) => {
+        try {
+            const {customerId} = req.params
+            const ls = await LichSuGiaoDichModel.find({customerId: customerId || req.user.id})
+            res.json(SuccessResponse({
+                message: "Lấy lịch sử giao dịch thành công",
+                data: ls
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("58", error))
         }
     }
 }

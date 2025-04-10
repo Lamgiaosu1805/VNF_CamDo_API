@@ -7,6 +7,7 @@ const KhoanVayModel = require("../models/KhoanVayModel");
 const CustomerModel = require("../models/CustomerModel");
 const NotificationTokenModel = require("../models/NotificationTokenModel");
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools");
+const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel");
 
 const HopDongController = {
     kyHopDong: async(req, res) => {
@@ -17,6 +18,7 @@ const HopDongController = {
             const customerId = req.user.id
             const yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, customerId: customerId, status: 6})
             if(!yeuCau) {
+                session.endSession();
                 return res.json(FailureResponse("35"))
             }
             const soLuongHopDong = await HopDongModel.countDocuments() + 1
@@ -62,6 +64,14 @@ const HopDongController = {
                 // return res.json(FailureResponse("43"))
             }
             response = await yeuCau.updateOne({status: 4},{session})
+            const lichSu = new LichSuGiaoDichModel({
+                customerId: customerId,
+                tieuDeGiaoDich: "Giải ngân",
+                noiDungGiaoDich: `Giải ngân từ hợp đồng vay số ${soHopDong}`,
+                soTienGiaoDich: chiTietKhoanVay.soTienDuocGiaiNgan,
+                type: 0
+            })
+            await lichSu.save({session})
             await session.commitTransaction();
             session.endSession();
             try {
