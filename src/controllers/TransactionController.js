@@ -198,7 +198,7 @@ const TransactionController = {
                 $or: [
                     { hoTenCustomer: { $regex: customerName || "", $options: "i" } },
                 ]
-            })
+            }).sort({ createdAt: -1 })
             res.json(SuccessResponse({
                 message: "Lấy danh sách yêu cầu rút tiền thành công",
                 data: listRT
