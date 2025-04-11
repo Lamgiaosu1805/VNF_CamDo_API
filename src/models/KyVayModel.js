@@ -12,7 +12,7 @@ const KyVay = new Schema({
     soTienCanTra: { type: Number, required: true },
     soTienDaTra: { type: Number, default: 0 },
     trangThai: { type: Number, default: 1 }, //1: Chưa thanh toán, 2: Đã thanh toán
-    quaHan: {type: Boolean, default: false},
+    quaHan: {type: Boolean, default: false},//true: Đã quá hạn thanh toán
     lichSuTra: { type: Array, default: [] },
     laiQuaHan: { type: Number, default: 0 },
     phiPhat: { type: Number, default: 0 }, 
