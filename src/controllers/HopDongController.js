@@ -71,7 +71,7 @@ const HopDongController = {
             const lichSu = new LichSuGiaoDichModel({
                 customerId: customerId,
                 tieuDeGiaoDich: "Giải ngân",
-                noiDungGiaoDich: `Giải ngân từ hợp đồng vay số ${soHopDong}`,
+                noiDungGiaoDich: `Giải ngân từ hợp đồng vay số ${soHopDong}\nSố dư khả dụng: ${formatMoney(SDmoi)} VNĐ`,
                 soTienGiaoDich: chiTietKhoanVay.soTienDuocGiaiNgan,
                 type: 0
             })
