@@ -192,6 +192,8 @@ const YeuCauVayVonController = {
                     ky: i,
                     ngayTraNo: dueDate,
                     soTienCanTra: amount,
+                    soTienGoc: yeuCau.giaTriSauThamDinh / soKy,
+                    soTienLai: amount - yeuCau.giaTriSauThamDinh / soKy,
                 });
             }
             response = await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})

@@ -31,6 +31,8 @@ const HopDongController = {
                     ky: e.ky,
                     ngayTraNo: e.ngayTraNo,
                     soTienCanTra: e.soTienCanTra,
+                    soTienGoc: e.soTienGoc,
+                    soTienLai: e.soTienLai
                 }
             })
             const newHopDong = new HopDongModel({
@@ -39,9 +41,10 @@ const HopDongController = {
                 linkHopDong: "https://danhgiaxe.edu.vn/upload/2025/01/meme-bua-038.webp",
             })
             await newHopDong.save({session})
+            const soTienCanTra = yeuCau.kyTraNo.reduce((total, item) => total + item.soTienCanTra, 0);
             const chiTietKhoanVay = {
                 soTienVay: yeuCau.giaTriSauThamDinh,
-                soTienCanTra: Math.round(yeuCau.giaTriSauThamDinh * (1 + 0.12)),
+                soTienCanTra: soTienCanTra,
                 soTienbaoHiem: 0,
                 soTienDuocGiaiNgan: yeuCau.giaTriSauThamDinh - 0,
                 laiXuat: "12%/năm",

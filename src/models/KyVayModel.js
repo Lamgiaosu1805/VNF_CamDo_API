@@ -7,6 +7,8 @@ const KyVay = new Schema({
     customerId: { type: String, required: true },
     ky: { type: Number, required: true },
     ngayTraNo: { type: String, required: true },
+    soTienGoc: { type: String, required: true },
+    soTienLai: { type: String, required: true },
     soTienCanTra: { type: Number, required: true },
     soTienDaTra: { type: Number, default: 0 },
     trangThai: { type: Number, default: 1 }, //1: Chưa thanh toán, 2: Đã thanh toán, 3: Trễ hạn
