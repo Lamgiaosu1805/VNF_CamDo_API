@@ -6,8 +6,9 @@ const router = express.Router()
 
 //admin
 router.get('/danhSachKhoanVayAdmin', auth.verifyTokenAdmin, KhoanVayController.layDanhSachKhoanVayAdmin);
-
+router.get('/chiTietKhoanVayAdmin/:idKhoanVay', auth.verifyTokenAdmin, KhoanVayController.layChiTietKhoanVay);
 //customer
 router.get('/danhSachKhoanVay', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, KhoanVayController.layDanhSachKhoanVayCustomer);
+router.get('/chiTietKhoanVay/:idKhoanVay', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, KhoanVayController.layChiTietKhoanVay);
 
 module.exports = router;
