@@ -145,7 +145,11 @@ const YeuCauVayVonController = {
                 customerInfo: {
                     fullname: item.customerId?.fullname || "",
                     cccd: item.customerId?.cccd || "",
-                    phoneNumber: item.customerId?.username
+                    phoneNumber: item.customerId?.username,
+                    ngayCap: item.customerId?.ngayCapCCCD || "",
+                    noiCap: item.customerId?.noiCapCCCD || "",
+                    ngayHetHan: item.customerId?.ngayHetHanCCCD || "",
+                    diaChiThuongTru: item.customerId?.diaChiThuongTru || "",
                 },
                 customerId: undefined
             }))

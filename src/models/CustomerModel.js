@@ -18,7 +18,6 @@ const Customer = new Schema({
     ngayCapCCCD: {type: String},
     noiCapCCCD: {type: String},
     ngayHetHanCCCD: {type: String},
-    firebaseToken: { type: String, default: "" },
     isDelete: { type: Boolean, default: false },
     soDuKhaDung: { type: Number, default: 0 },
     createdAt: {
