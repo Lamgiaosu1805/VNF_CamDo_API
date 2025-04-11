@@ -193,7 +193,7 @@ const YeuCauVayVonController = {
                     ngayTraNo: dueDate,
                     soTienCanTra: amount,
                     soTienGoc: Math.round(yeuCau.giaTriSauThamDinh / soKy),
-                    soTienLai: amount - yeuCau.giaTriSauThamDinh / soKy,
+                    soTienLai: amount - Math.round(yeuCau.giaTriSauThamDinh / soKy),
                 });
             }
             response = await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
