@@ -18,6 +18,18 @@ const KhoanVayController = {
     layDanhSachKhoanVayAdmin: async (req, res) => {
         try {
             const listData = await KhoanVayModel.find()
+                .populate('customerId')
+                .lean()
+                .then((results) =>
+                    results.map((item) => ({
+                        ...item,
+                        customerInfo: {
+                            phoneNumber: item.customerId?.username,
+                            fullname:  item.customerId?.fullname || "",
+                        },
+                        customerId: undefined,
+                    }))
+                );
             res.json(SuccessResponse({
                 message: "Lấy danh sách khoản vay thành công",
                 data: listData

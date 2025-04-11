@@ -4,7 +4,7 @@ const moment = require('moment-timezone')
 
 const KhoanVay = new Schema({
     soHopDong: { type: String, required: true, unique: true },
-    customerId: { type: String, required: true },
+    customerId: { type: String, required: true, ref: 'customer' },
     maYeuCau: { type: String, required: true },
     chiTietKhoanVay: {type: Object, required: true}, // Bao gồm các loại phí, tổng số tiền, lãi xuất ...
     status: {type: Boolean, default: false}, //Trạng thái true: Đã thanh toán, false: Đang hoạt động
