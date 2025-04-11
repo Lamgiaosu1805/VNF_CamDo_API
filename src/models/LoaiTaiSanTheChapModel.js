@@ -6,6 +6,7 @@ const LoaiTaiSanTheChap = new Schema({
     ten: { type: String, required: true },
     type: { type: Number, required: true },
     ghiChu: { type: String, default: "" },
+    imageUrl: { type: String },
     isDelete: { type: Boolean, default: false },
     createdAt: {
         type: String,

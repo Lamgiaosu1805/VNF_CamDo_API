@@ -42,7 +42,8 @@ const YeuCauVayVonController = {
                     loaiTaiSanInfo: {
                         _id: item.idLoaiTaiSan?._id,
                         ten: item.idLoaiTaiSan?.ten,
-                        type: item.idLoaiTaiSan?.type
+                        type: item.idLoaiTaiSan?.type,
+                        imageUrl: item.idLoaiTaiSan?.imageUrl
                     },
                     linkHopDong: item.status == 6 ? "https://danhgiaxe.edu.vn/upload/2025/01/meme-bua-038.webp" : undefined,
                     idLoaiTaiSan: undefined,
