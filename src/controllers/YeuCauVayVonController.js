@@ -192,7 +192,7 @@ const YeuCauVayVonController = {
                     ky: i,
                     ngayTraNo: dueDate,
                     soTienCanTra: amount,
-                    soTienGoc: yeuCau.giaTriSauThamDinh / soKy,
+                    soTienGoc: Math.round(yeuCau.giaTriSauThamDinh / soKy),
                     soTienLai: amount - yeuCau.giaTriSauThamDinh / soKy,
                 });
             }
