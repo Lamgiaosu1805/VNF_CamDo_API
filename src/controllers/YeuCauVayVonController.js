@@ -168,7 +168,7 @@ const YeuCauVayVonController = {
                 return res.json(FailureResponse("35"))
             }
             const soKy = yeuCau.soKyTraNo
-            const totalMoney = yeuCau.giaTriSauThamDinh * (1 + 0.12)
+            const totalMoney = yeuCau.giaTriSauThamDinh * (1 + 0.12/12 * soKy)
             const today = moment();
             const ngayTraNo = today.date();
 
