@@ -45,6 +45,7 @@ const HopDongController = {
                 soTienbaoHiem: 0,
                 soTienDuocGiaiNgan: yeuCau.giaTriSauThamDinh - 0,
                 laiXuat: "12%/năm",
+                soKy: yeuCau.soKyTraNo
             }
             const newKhoanVay = new KhoanVayModel({
                 soHopDong: soHopDong,
