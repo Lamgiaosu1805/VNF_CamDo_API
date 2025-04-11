@@ -121,9 +121,10 @@ const CustomerController = {
     },
     layDanhSachKhachHang: async (req, res) => {
         try {
-            const listCustomer = await CustomerModel.find({isDelete: false}).select("-password")
+            const listCustomer = await CustomerModel.find({isDelete: false}).sort({ createdAt: -1 }).select("-password")
             res.json(SuccessResponse({
                 message: "Lấy danh sách thành công",
+                total: listCustomer.length,
                 data: listCustomer
             }))
         } catch (error) {
