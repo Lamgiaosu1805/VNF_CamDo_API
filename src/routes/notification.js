@@ -4,7 +4,7 @@ const NotificationController = require('../controllers/NotificationController');
 const router = express.Router()
 
 //admin
-router.post('/sendNofification', auth.verifyTokenAdmin, NotificationController.pushNotification);
+router.post('/sendNofification', auth.verifyTokenAdmin, NotificationController.testFirebasePush);
 
 //customer
 
