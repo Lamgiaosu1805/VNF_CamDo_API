@@ -97,7 +97,7 @@ const TransactionController = {
                     customerId: req.user.id,
                     soTienGiaoDich: soTienNap,
                     tieuDeGiaoDich: "Nạp tiền",
-                    noiDungGiaoDich: "Nạp tiền vào tài khoản",
+                    noiDungGiaoDich: `Nạp tiền vào tài khoản\nSố dư khả dụng: ${formatMoney(soDuMoi)} VNĐ`,
                     type: 0,
                 })
                 await lsNap.save({session})
@@ -162,7 +162,7 @@ const TransactionController = {
             const lsRut = new LichSuGiaoDichModel({
                 customerId: req.user.id,
                 tieuDeGiaoDich: "Yêu cầu rút tiền",
-                noiDungGiaoDich: "Rút tiền về tài khoản liên kết",
+                noiDungGiaoDich: `Rút tiền về tài khoản liên kết\nSố dư khả dụng: ${formatMoney(soDuKhaDungConLai)}`,
                 soTienGiaoDich: soTienRut,
                 type: 1
             })
@@ -258,7 +258,7 @@ const TransactionController = {
             const ls = new LichSuGiaoDichModel({
                 customerId: yeuCauRT.customerId,
                 tieuDeGiaoDich: "Trả lại tiền yêu cầu rút",
-                noiDungGiaoDich: `Từ chối yêu cầu rút tiền với lí do: ${lyDoTuChoi}`,
+                noiDungGiaoDich: `Từ chối yêu cầu rút tiền với lí do: ${lyDoTuChoi}\nSố dư khả dụng: ${formatMoney(customer.soDuKhaDung + yeuCauRT.soTienRut)}`,
                 type: 0,
                 soTienGiaoDich: yeuCauRT.soTienRut
             })
