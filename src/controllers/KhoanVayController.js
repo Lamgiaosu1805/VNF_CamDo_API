@@ -114,6 +114,13 @@ const KhoanVayController = {
             console.log(error)
             res.json(FailureResponse("61", error))
         }
+    },
+    traNo: async (req, res) => {
+        try {
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 module.exports = KhoanVayController
