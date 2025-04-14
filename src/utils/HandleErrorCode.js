@@ -122,6 +122,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Sai mật khẩu`;
         case "61":
             return `Error: ${errorCode}, Có lỗi khi lấy chi tiết khoản vay`;
+        case "62":
+            return `Error: ${errorCode}, Có lỗi khi thanh toán nợ kỳ tới`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

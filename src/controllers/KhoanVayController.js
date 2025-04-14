@@ -115,10 +115,20 @@ const KhoanVayController = {
             res.json(FailureResponse("61", error))
         }
     },
-    traNo: async (req, res) => {
+    thanhToanNo: async (req, res) => {
         try {
-            
+            const {soTienThanhToan} = req.body
+            // if(!Number.isInteger(soTienThanhToan)) {
+            //     return res.json(FailureResponse("62", "Số tiền thanh toán không đúng định dạng"))
+            // }
+            const keyRedis = `DSKhoanVayCustomer:${req.user.id}`
+            const responseRedis = await redis.get(keyRedis)
+            if(responseRedis) {
+                // return res.json(FailureResponse("62", "Dữ liệu khoản vay không tồn tại"))
+            }
+            res.json(JSON.parse(responseRedis))
         } catch (error) {
+            res.json(FailureResponse("62", error))
             console.log(error)
         }
     }
