@@ -3,6 +3,7 @@ const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { default: mongoose } = require("mongoose")
 const { sendNotification } = require('../utils/Tools')
+const messaging = require('../../firebase');
 
 const NotificationController = {
     saveToken: async (req, res) => {
@@ -58,6 +59,34 @@ const NotificationController = {
             res.json(FailureResponse("31", error))
         }
     },
+    testFirebasePush: async (req, res) => {
+        const message = {
+            token: req.body.deviceToken,
+            notification: {
+              title: req.body.title,
+              body: req.body.content,
+            },
+            android: {
+              priority: 'high',
+            },
+            apns: {
+              payload: {
+                aps: {
+                  sound: 'default',
+                },
+              },
+            },
+          };
+        
+          try {
+            const response = await messaging.send(message);
+            console.log('✅ Notification sent:', response);
+            res.send("s")
+          } catch (error) {
+            console.error('❌ Error sending notification:', error);
+            res.send("Lỗi")
+          }
+    }
 }
 
 module.exports = NotificationController
