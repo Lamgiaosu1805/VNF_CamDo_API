@@ -26,6 +26,7 @@ const verifyToken = (isAdmin, req, res, next, requireEkyc) => {
             }
             else {
                 req.user = user;
+                req.isAdmin = isAdmin;
                 try {
                     var validatedUser
                     isAdmin == true ? validatedUser = await AdminAccountModel.findById(user.id) : validatedUser = await CustomerModel.findById(user.id)

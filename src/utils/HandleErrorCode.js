@@ -126,6 +126,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi thanh toán nợ kỳ tới`;
         case "63":
             return `Error: ${errorCode}, Có lỗi khi save firebase token admin`;
+        case "64":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách thông báo`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }

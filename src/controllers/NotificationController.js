@@ -5,6 +5,7 @@ const { default: mongoose } = require("mongoose")
 const { sendNotification } = require('../utils/Tools')
 const messaging = require('../../firebase');
 const NotificationAdminTokenModel = require("../models/NotificationAdminTokenModel")
+const NotificationUserModel = require("../models/NotificationUserModel")
 
 const NotificationController = {
     saveToken: async (req, res) => {
@@ -105,6 +106,21 @@ const NotificationController = {
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("63", error))
+        }
+    },
+    getNotification: async (req, res) => {
+        try {
+            const {type} = req.query
+            const isAdmin = req.isAdmin
+            const userId = req.user.id
+            const notifications = await NotificationUserModel.find({type, userId, isAdmin})
+            res.json(SuccessResponse({
+                message: "Lấy danh sách thông báo thành công",
+                data: notifications
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("64", error))
         }
     }
 }
