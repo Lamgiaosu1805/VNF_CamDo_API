@@ -3,6 +3,7 @@ const YeuCauVayVonModel = require("../models/YeuCauVayVonModel");
 const moment = require('moment');
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest");
 const { sendNotification } = require("../utils/Tools");
+const NotificationUserModel = require("../models/NotificationUserModel");
 
 const YeuCauVayVonController = {
     guiYeuCauVayVon: async (req, res) => {
@@ -94,6 +95,14 @@ const YeuCauVayVonController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: response.customerId})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: response.customerId,
+                    isAdmin: false,
+                    title: "Kết quả thẩm định",
+                    content: `Yêu cầu vay vốn mã ${response.maYeuCau} đã được thẩm định. Vui lòng vào app để xem chi tiết giá trị thẩm định`,
+                    type: 2
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }
@@ -203,13 +212,20 @@ const YeuCauVayVonController = {
             }
             response = await yeuCau.updateOne({status: 6, idNguoiGiaiNgan: req.user.id, kyTraNo: dueDates})
             try {
-                //Thiếu create Noti để sau
                 const notification = {
                     title: "X-FINANCE",
                     content: `Yêu cầu vay vốn mã ${yeuCau.maYeuCau} đã được đồng ý giải ngân. Vui lòng vào app ký hợp đồng để giải ngân`
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: yeuCau.customerId})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: yeuCau.customerId,
+                    isAdmin: false,
+                    title: "Kết quả thẩm định",
+                    content: `Yêu cầu vay vốn mã ${yeuCau.maYeuCau} đã được đồng ý giải ngân. Vui lòng vào app ký hợp đồng để giải ngân`,
+                    type: 2
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }

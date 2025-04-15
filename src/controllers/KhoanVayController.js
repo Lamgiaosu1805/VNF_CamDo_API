@@ -7,6 +7,7 @@ const CustomerModel = require("../models/CustomerModel")
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel")
 const { formatMoney, sendNotification } = require("../utils/Tools")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
+const NotificationUserModel = require("../models/NotificationUserModel")
 
 const KhoanVayController = {
     layDanhSachKhoanVayCustomer: async (req, res) => {
@@ -207,6 +208,14 @@ const KhoanVayController = {
                     }
                     const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                     sendNotification([notificationToken.token], notification.title, notification.content)
+                    const notificationUser = new NotificationUserModel({
+                        userId: customer._id,
+                        isAdmin: false,
+                        title: "Tất toán khoản vay",
+                        content: `Hợp đồng số ${khoanVay.soHopDong} đã hoàn thành tất toán.`,
+                        type: 2
+                    })
+                    await notificationUser.save()
                 } catch (error) {
                     console.log(error)
                 }
@@ -221,6 +230,14 @@ const KhoanVayController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: customer._id,
+                    isAdmin: false,
+                    title: "Thanh toán toán khoản vay",
+                    content: `Thanh toán dư nợ của hợp đồng số ${khoanVay.soHopDong} thành công.\nSố dư khả dụng: ${formatMoney(customer.soDuKhaDung - soTienThanhToan)} VNĐ`,
+                    type: 2
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }

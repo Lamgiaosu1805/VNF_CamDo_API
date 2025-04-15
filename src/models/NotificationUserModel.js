@@ -3,9 +3,17 @@ const Schema = mongoose.Schema
 const moment = require('moment-timezone')
 
 const NotificationUser = new Schema({
-    // username: { type: String, required: true, unique: true },
-    // password: { type: String, required: true },
-    // isDelete: { type: Boolean, default: false },
+    userId: { type: String, required: true },
+    isAdmin: { type: Boolean, required: true },
+    isSeen: { type: Boolean, default: false },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    type: { type: Number, required: true },
+    //type=1 : Thông báo giao dịch
+    //type=2 : Thông báo khoản vay
+    //type=3 : Thông báo Khuyến mại
+    //type=4 : Thông báo hệ thống
+    isDelete: { type: Boolean, default: false },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7

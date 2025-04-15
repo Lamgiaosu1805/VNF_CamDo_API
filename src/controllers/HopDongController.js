@@ -9,6 +9,7 @@ const NotificationTokenModel = require("../models/NotificationTokenModel");
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools");
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel");
 const redis = require("../config/connectRedis");
+const NotificationUserModel = require("../models/NotificationUserModel");
 
 const HopDongController = {
     kyHopDong: async(req, res) => {
@@ -83,13 +84,20 @@ const HopDongController = {
             await session.commitTransaction();
             session.endSession();
             try {
-                //Thiếu create Noti để sau
                 const notification = {
                     title: "X-FINANCE",
                     content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)} VNĐ`
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customerId})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: customerId,
+                    isAdmin: false,
+                    title: "Giải ngân",
+                    content: `Hợp đồng số ${soHopDong} đã được giải ngân vào tài khoản ${hideUsername(customer.username)}\nSố dư khả dụng: ${formatMoney(SDmoi)} VNĐ`,
+                    type: 2
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }

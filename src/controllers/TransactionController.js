@@ -8,6 +8,7 @@ const YeuCauRutTienModel = require("../models/YeuCauRutTienModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools")
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel")
+const NotificationUserModel = require("../models/NotificationUserModel")
 
 const TransactionController = {
     getListBank: async (req, res) => {
@@ -108,6 +109,14 @@ const TransactionController = {
                     }
                     const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                     sendNotification([notificationToken.token], notification.title, notification.content)
+                    const notificationUser = new NotificationUserModel({
+                        userId: customer._id,
+                        isAdmin: false,
+                        title: "Nạp tiền",
+                        content: `Tài khoản ${hideUsername(customer.username)} đã nạp thành công số tiền: ${formatMoney(soTienNap)} VNĐ\nSố dư khả dụng: ${formatMoney(soDuMoi)} VNĐ`,
+                        type: 1
+                    })
+                    await notificationUser.save()
                 } catch (error) {
                     console.log(error)
                 }
@@ -174,6 +183,14 @@ const TransactionController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: customer._id,
+                    isAdmin: false,
+                    title: "Rút tiền",
+                    content: `Tài khoản ${hideUsername(customer.username)} đã yêu cầu rút thành công số tiền: ${formatMoney(soTienRut)} VNĐ, tiền sẽ về tài khoản ngân hàng của bạn trong 1 ngày làm việc.\nSố dư khả dụng: ${formatMoney(soDuKhaDungConLai)} VNĐ`,
+                    type: 1
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }
@@ -226,6 +243,14 @@ const TransactionController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customer.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: customer._id,
+                    isAdmin: false,
+                    title: "Rút tiền",
+                    content: `Yêu cầu rút tiền với số tiền ${formatMoney(yeuCauRT.soTienRut)} VNĐ của bạn đã được phê duyệt.`,
+                    type: 1
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }
@@ -270,6 +295,14 @@ const TransactionController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: customer.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                const notificationUser = new NotificationUserModel({
+                    userId: customer._id,
+                    isAdmin: false,
+                    title: "Rút tiền",
+                    content: `Yêu cầu rút tiền với số tiền ${formatMoney(yeuCauRT.soTienRut)} VNĐ của bạn đã bị từ chối với lí do: ${lyDoTuChoi}.\nSố tiền đã được trả về tài khoản X-FINANCE của bạn\nSố dư khả dụng: ${formatMoney(customer.soDuKhaDung + yeuCauRT.soTienRut)} VNĐ`,
+                    type: 1
+                })
+                await notificationUser.save()
             } catch (error) {
                 console.log(error)
             }
