@@ -4,6 +4,7 @@ const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const { default: mongoose } = require("mongoose")
 const { sendNotification } = require('../utils/Tools')
 const messaging = require('../../firebase');
+const NotificationAdminTokenModel = require("../models/NotificationAdminTokenModel")
 
 const NotificationController = {
     saveToken: async (req, res) => {
@@ -86,6 +87,25 @@ const NotificationController = {
             console.error('❌ Error sending notification:', error);
             res.send("Lỗi")
           }
+    },
+    saveFirebaseTokenAdmin: async (req, res) => {
+        try {
+            const {firebaseToken} = req.body
+            const notificationToken = await NotificationAdminTokenModel.findOne({userId: req.user.id, firebaseToken})
+            if(!notificationToken) {
+                const noti = new NotificationAdminTokenModel({
+                    firebaseToken,
+                    userId: req.user.id
+                })
+                await noti.save()
+            }
+            res.json(SuccessResponse({
+                message: "Save firebase token thành công"
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("63", error))
+        }
     }
 }
 
