@@ -8,6 +8,7 @@ const CustomerModel = require("../models/CustomerModel");
 const NotificationTokenModel = require("../models/NotificationTokenModel");
 const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools");
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel");
+const redis = require("../config/connectRedis");
 
 const HopDongController = {
     kyHopDong: async(req, res) => {
@@ -75,6 +76,8 @@ const HopDongController = {
                 soTienGiaoDich: chiTietKhoanVay.soTienDuocGiaiNgan,
                 type: 0
             })
+            const keyRedis = `DSKhoanVayCustomer:${req.user.id}`
+            await redis.del(keyRedis)
             await lichSu.save({session})
             await session.commitTransaction();
             session.endSession();
