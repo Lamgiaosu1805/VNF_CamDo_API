@@ -76,8 +76,10 @@ const HopDongController = {
                 soTienGiaoDich: chiTietKhoanVay.soTienDuocGiaiNgan,
                 type: 0
             })
-            const keyRedis = `DSKhoanVayCustomer:${req.user.id}`
+            const keyRedis = `DSKhoanVayCustomer:${customerId}`
+            console.log(keyRedis, "KEY REDIS")
             await redis.del(keyRedis)
+            console.log("KEY REDIS deleted")
             await lichSu.save({session})
             await session.commitTransaction();
             session.endSession();
