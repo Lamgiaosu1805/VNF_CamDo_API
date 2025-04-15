@@ -29,7 +29,7 @@ const KhoanVayController = {
                             customerId: req.user.id
                         }
                     }
-                ])
+                ]).sort({ createdAt: -1 })
                 const filteredData = listData.map((e) => {
                     const today = new Date();
                     const ngayGanNhat = e.kyTraNo
