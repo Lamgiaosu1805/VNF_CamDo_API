@@ -88,11 +88,8 @@ const AuthController = {
             else if(type == "signUp") {
                 await redis.set(`${username}:validateDevice`, deviceId, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
             }
-            else if(type == "addTKNH") { //KEY OTP ADD Tài khoản ngân hàng
-                await redis.set(`${username}:${type}`, otp, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
-            }
-            else if(type == "rutTien") { //KEY OTP Rút tiền
-                await redis.set(`${username}:${type}`, otp, "EX", 3600) // Key check Đúng device yêu cầu OTP để tạo tài khoản
+            else if(type == "rutTien" || type == "addTKNH" || type == "thanhToanNo") { // KEY OTP
+                await redis.set(`${username}:${type}`, otp, "EX", 3600)
             }
             else {
                 console.log(`${type}: type không xác định`)
