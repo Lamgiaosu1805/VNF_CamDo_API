@@ -5,6 +5,7 @@ const router = express.Router()
 
 //admin
 router.post('/sendNofification', auth.verifyTokenAdmin, NotificationController.testFirebasePush);
+router.post('/saveFirebaseToken', auth.verifyTokenAdmin, NotificationController.saveFirebaseTokenAdmin);
 
 //customer
 
