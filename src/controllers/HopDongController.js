@@ -76,13 +76,14 @@ const HopDongController = {
                 soTienGiaoDich: chiTietKhoanVay.soTienDuocGiaiNgan,
                 type: 0
             })
+            console.log("123456")
+            await lichSu.save({session})
+            await session.commitTransaction();
+            session.endSession();
             const keyRedis = `DSKhoanVayCustomer:${customerId}`
             console.log(keyRedis, "KEY REDIS")
             await redis.del(keyRedis)
             console.log("KEY REDIS deleted")
-            await lichSu.save({session})
-            await session.commitTransaction();
-            session.endSession();
             try {
                 //Thiếu create Noti để sau
                 const notification = {
