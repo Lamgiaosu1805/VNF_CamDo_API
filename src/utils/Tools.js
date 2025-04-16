@@ -159,7 +159,7 @@ const sendNotificationToAdmin = async (tokens, title, body) => {
   };
 
   try {
-    const response = await messaging.sendMulticast(message);
+    const response = await messaging.sendEachForMulticast(message);
     console.log(`✅ Notifications sent: ${response.successCount} success, ${response.failureCount} failed`);
     
     // Nếu cần xử lý những token lỗi (ví dụ: không còn hợp lệ)
