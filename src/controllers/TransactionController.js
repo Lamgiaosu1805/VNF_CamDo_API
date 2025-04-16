@@ -212,7 +212,22 @@ const TransactionController = {
                 const listToken = notificationTokenAdmin.map((e) => {
                     return e.firebaseToken
                 })
+                const seenUserIds = new Set();
+                const listNotiStore = notificationTokenAdmin
+                    .filter(e => {
+                        if (seenUserIds.has(e.userId)) return false;
+                        seenUserIds.add(e.userId);
+                        return true;
+                    })
+                    .map(e => ({
+                        userId: e.userId,
+                        isAdmin: true,
+                        title: notificationAdmin.title,
+                        content: notificationAdmin.content,
+                        type: 1,
+                    }));
                 sendNotificationToAdmin(listToken, notificationAdmin.title, notificationAdmin.content)
+                await NotificationUserModel.insertMany(listNotiStore)
             } catch (error) {
                 console.log(error)
             }
