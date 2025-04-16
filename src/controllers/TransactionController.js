@@ -196,17 +196,9 @@ const TransactionController = {
                 console.log(error)
             }
             try {
-                const now = new Date();
-                const formatted = now.toLocaleString('vi-VN', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }).replace(',', '');
                 const notificationAdmin = {
                     title: "Yêu cầu rút tiền",
-                    content: `Khách hàng ${customer.fullname} đã yêu cầu rút tiền với số tiền ${formatMoney(soTienRut)} VNĐ vào lúc ${formatted}`
+                    content: `Khách hàng ${customer.fullname} đã yêu cầu rút tiền với số tiền ${formatMoney(soTienRut)} VNĐ vào lúc ${"AHIHIHEHE"}`
                 }
                 const notificationTokenAdmin = await NotificationAdminTokenModel.find().sort({createdAt: -1})
                 const listToken = notificationTokenAdmin.map((e) => {
