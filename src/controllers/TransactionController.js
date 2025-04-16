@@ -226,6 +226,7 @@ const TransactionController = {
                         content: notificationAdmin.content,
                         type: 1,
                     }));
+                console.log(listNotiStore, "List NotiStore")
                 sendNotificationToAdmin(listToken, notificationAdmin.title, notificationAdmin.content)
                 await NotificationUserModel.insertMany(listNotiStore)
             } catch (error) {
