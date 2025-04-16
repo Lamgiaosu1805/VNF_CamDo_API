@@ -162,6 +162,40 @@ const NotificationController = {
             console.log(error)
             res.json(FailureResponse("64", error))
         }
+    },
+    seenNoti: async(req, res) => {
+        try {
+            const {idNoti} = req.params
+            const noti = await NotificationUserModel.findOneAndUpdate({_id: idNoti, isSeen: false, userId: req.user.id}, {isSeen: true})
+            if(!noti) {
+                console.log(`Không tồn tại thông báo có id: ${idNoti}`)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            res.json(SuccessResponse({
+                message: "Đã xem thông báo"
+            }))
+        }
+    },
+    seenAllNoti: async(req, res) => {
+        console.log(req)
+        try {
+            await NotificationUserModel.updateMany(
+                {
+                    isSeen: false, userId: req.user.id
+                },
+                {
+                    $set: {isSeen: true}
+                }
+            )
+        } catch (error) {
+            console.log(error)
+        } finally {
+            res.json(SuccessResponse({
+                message: "Đã xem thông báo"
+            }))
+        }
     }
 }
 

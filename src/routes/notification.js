@@ -8,8 +8,12 @@ const router = express.Router()
 router.post('/sendNofification', auth.verifyTokenAdmin, NotificationController.testFirebasePush);
 router.post('/saveFirebaseToken', auth.verifyTokenAdmin, NotificationController.saveFirebaseTokenAdmin);
 router.get('/getNotificationAdmin', auth.verifyTokenAdmin, NotificationController.getNotification);
+router.get('/seenNotiAdmin/:idNoti', auth.verifyTokenAdmin, NotificationController.seenNoti);
+router.get('/seenAllNotiAdmin', auth.verifyTokenAdmin, NotificationController.seenAllNoti);
 
 //customer
 router.get('/getNotificationCustomer', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, NotificationController.getNotification);
+router.get('/seenNoti/:idNoti', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, NotificationController.seenNoti);
+router.get('/seenAllNoti', auth.verifyTokenCustomer, validateDevice.checkSameDeviceId, NotificationController.seenAllNoti);
 
 module.exports = router;
