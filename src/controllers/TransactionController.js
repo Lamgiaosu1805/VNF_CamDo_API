@@ -184,8 +184,6 @@ const TransactionController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
-                await notificationUser.save()
-
                 const notificationUser = new NotificationUserModel({
                     userId: customer._id,
                     isAdmin: false,
@@ -193,6 +191,11 @@ const TransactionController = {
                     content: `Tài khoản ${hideUsername(customer.username)} đã yêu cầu rút thành công số tiền: ${formatMoney(soTienRut)} VNĐ, tiền sẽ về tài khoản ngân hàng của bạn trong 1 ngày làm việc.\nSố dư khả dụng: ${formatMoney(soDuKhaDungConLai)} VNĐ`,
                     type: 1
                 })
+                await notificationUser.save()
+            } catch (error) {
+                console.log(error)
+            }
+            try {
                 const now = new Date();
                 const formatted = now.toLocaleString('vi-VN', {
                 hour: '2-digit',
@@ -210,7 +213,6 @@ const TransactionController = {
                     return e.firebaseToken
                 })
                 sendNotificationToAdmin(listToken, notificationAdmin.title, notificationAdmin.content)
-                
             } catch (error) {
                 console.log(error)
             }
