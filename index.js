@@ -9,7 +9,7 @@ require('dotenv').config();
 
 //use middlewares
 app.use(morgan('dev'))
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({
     extended: true
 }))

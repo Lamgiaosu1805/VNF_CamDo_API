@@ -10,6 +10,9 @@ const { sendNotification, hideUsername, formatMoney, sendNotificationToAdmin } =
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel")
 const NotificationUserModel = require("../models/NotificationUserModel")
 const NotificationAdminTokenModel = require("../models/NotificationAdminTokenModel")
+const path = require('path');
+const fs = require('fs');
+const YeuCauNapTienModel = require("../models/YeuCauNapTienModel")
 
 const TransactionController = {
     getListBank: async (req, res) => {
@@ -92,9 +95,33 @@ const TransactionController = {
                 res.json(FailureResponse("48"))
             }
             else {
+                const matches = image.match(/^data:(.+);base64,(.+)$/);
+                if (!matches) {
+                    return res.json(FailureResponse("49", 'Base64 string is not in correct format'))
+                }
+                const mimeType = matches[1];
+                const extension = mimeType.split('/')[1];
+                const imageBuffer = Buffer.from(matches[2], 'base64');
+                const baseFolder = '/fileAnhNapTien/'
+                const folderPath = '/var/www/X_finance_upload' + baseFolder;
+                const fileName = `${Date.now().toString()}.${extension}`;
+                const filePath = path.join(folderPath, fileName);
+                 // Tạo folder nếu chưa tồn tại
+                if (!fs.existsSync(folderPath)) {
+                    fs.mkdirSync(folderPath, { recursive: true });
+                }
+                fs.writeFileSync(filePath, imageBuffer);
+                console.log(`✅ Ảnh đã được lưu vào: ${filePath}`);
                 const customer = req.customer
+                const yeuCauNapTien = new YeuCauNapTienModel({
+                    customerId: customer._id,
+                    soTienNap: soTienNap,
+                    status: 2,
+                    imageURL: baseFolder + fileName
+                })
+                await yeuCauNapTien.save({session})
                 const soDuMoi = customer.soDuKhaDung + soTienNap
-                await customer.updateOne({soDuKhaDung: soDuMoi})
+                await customer.updateOne({soDuKhaDung: soDuMoi}, {session})
                 const lsNap = new LichSuGiaoDichModel({
                     customerId: req.user.id,
                     soTienGiaoDich: soTienNap,
