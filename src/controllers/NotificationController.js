@@ -62,11 +62,42 @@ const NotificationController = {
         }
     },
     testFirebasePush: async (req, res) => {
+        // const message = {
+        //     token: req.body.deviceToken,
+        //     notification: {
+        //       title: req.body.title,
+        //       body: req.body.content,
+        //     },
+        //     android: {
+        //       priority: 'high',
+        //     },
+        //     apns: {
+        //       payload: {
+        //         aps: {
+        //           sound: 'default',
+        //         },
+        //       },
+        //     },
+        //   };
+        
+        //   try {
+        //     const response = await messaging.send(message);
+        //     console.log('✅ Notification sent:', response);
+        //     res.send("s")
+        //   } catch (error) {
+        //     console.error('❌ Error sending notification:', error);
+        //     res.send("Lỗi")
+        //   }
+        const notificationTokenAdmin = await NotificationAdminTokenModel.find().sort({createdAt: -1})
+                const listToken = notificationTokenAdmin.map((e) => {
+                    return e.firebaseToken
+                })
+                console.log(listToken)
         const message = {
-            token: req.body.deviceToken,
+            tokens: listToken, // danh sách token
             notification: {
-              title: req.body.title,
-              body: req.body.content,
+              title: "ABC",
+              body: "ABC",
             },
             android: {
               priority: 'high',
@@ -81,12 +112,21 @@ const NotificationController = {
           };
         
           try {
-            const response = await messaging.send(message);
-            console.log('✅ Notification sent:', response);
+            const response = await messaging.sendEachForMulticast(message);
+            console.log(`✅ Notifications sent: ${response.successCount} success, ${response.failureCount} failed`);
+            
+            // Nếu cần xử lý những token lỗi (ví dụ: không còn hợp lệ)
+            if (response.failureCount > 0) {
+              response.responses.forEach((resp, idx) => {
+                if (!resp.success) {
+                  console.error(`❌ Token failed [${tokens[idx]}]:`, resp.error);
+                }
+              });
+            }
             res.send("s")
           } catch (error) {
-            console.error('❌ Error sending notification:', error);
             res.send("Lỗi")
+            console.error('❌ Error sending multicast notification:', error);
           }
     },
     saveFirebaseTokenAdmin: async (req, res) => {

@@ -1,5 +1,5 @@
 const { Expo } = require("expo-server-sdk");
-const { messaging } = require("firebase-admin");
+const messaging = require('../../firebase');
 
 const sendNotification = (listToken, title, content) => {
     let expo = new Expo({
