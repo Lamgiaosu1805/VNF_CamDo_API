@@ -173,8 +173,17 @@ const KhoanVayController = {
                   // vẫn giữ trạng thái = 1
                 }
                 const ngayHomNay = new Date();
-                const ngayStr = ngayHomNay.toLocaleDateString('vi-VN'); // ví dụ: 15/04/2025
-                const logTra = `Đã thanh toán ${soTienCongVaoKy.toLocaleString('vi-VN')} VNĐ vào ${ngayStr}`;
+                // const ngayStr = ngayHomNay.toLocaleDateString('vi-VN'); // ví dụ: 15/04/2025
+                const formatter = new Intl.DateTimeFormat('vi-VN', {
+                    timeZone: 'Asia/Ho_Chi_Minh',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                });
+                const timeVN = formatter.format(ngayHomNay);
+                const logTra = `Đã thanh toán ${soTienCongVaoKy.toLocaleString('vi-VN')} VNĐ vào ${timeVN}`;
                 await KyVayModel.updateOne(
                   { _id: ky._id },
                   {
