@@ -113,7 +113,7 @@ const NotificationController = {
             const {type} = req.query
             const isAdmin = req.isAdmin
             const userId = req.user.id
-            const notifications = await NotificationUserModel.find({type, userId, isAdmin})
+            const notifications = await NotificationUserModel.find({type, userId, isAdmin}).sort({ createdAt: -1 })
             res.json(SuccessResponse({
                 message: "Lấy danh sách thông báo thành công",
                 data: notifications
