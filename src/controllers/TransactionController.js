@@ -6,9 +6,10 @@ const NotificationTokenModel = require("../models/NotificationTokenModel")
 const TKLienKetModel = require("../models/TKLienKetModel")
 const YeuCauRutTienModel = require("../models/YeuCauRutTienModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
-const { sendNotification, hideUsername, formatMoney } = require("../utils/Tools")
+const { sendNotification, hideUsername, formatMoney, sendNotificationToAdmin } = require("../utils/Tools")
 const LichSuGiaoDichModel = require("../models/LichSuGiaoDichModel")
 const NotificationUserModel = require("../models/NotificationUserModel")
+const NotificationAdminTokenModel = require("../models/NotificationAdminTokenModel")
 
 const TransactionController = {
     getListBank: async (req, res) => {
@@ -183,6 +184,8 @@ const TransactionController = {
                 }
                 const notificationToken = await NotificationTokenModel.findOne({userId: req.user.id})
                 sendNotification([notificationToken.token], notification.title, notification.content)
+                await notificationUser.save()
+
                 const notificationUser = new NotificationUserModel({
                     userId: customer._id,
                     isAdmin: false,
@@ -190,7 +193,24 @@ const TransactionController = {
                     content: `Tài khoản ${hideUsername(customer.username)} đã yêu cầu rút thành công số tiền: ${formatMoney(soTienRut)} VNĐ, tiền sẽ về tài khoản ngân hàng của bạn trong 1 ngày làm việc.\nSố dư khả dụng: ${formatMoney(soDuKhaDungConLai)} VNĐ`,
                     type: 1
                 })
-                await notificationUser.save()
+                const now = new Date();
+                const formatted = now.toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+                }).replace(',', '');
+                const notificationAdmin = {
+                    title: "Yêu cầu rút tiền",
+                    content: `Khách hàng ${customer.fullname} đã yêu cầu rút tiền với số tiền ${formatMoney(soTienRut)} VNĐ vào lúc ${formatted}`
+                }
+                const notificationTokenAdmin = await NotificationAdminTokenModel.find().sort({createdAt: -1})
+                const listToken = notificationTokenAdmin.map((e) => {
+                    return e.firebaseToken
+                })
+                sendNotificationToAdmin(listToken, notificationAdmin.title, notificationAdmin.content)
+                
             } catch (error) {
                 console.log(error)
             }

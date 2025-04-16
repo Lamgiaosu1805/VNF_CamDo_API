@@ -1,4 +1,5 @@
 const { Expo } = require("expo-server-sdk");
+const { messaging } = require("firebase-admin");
 
 const sendNotification = (listToken, title, content) => {
     let expo = new Expo({
@@ -133,4 +134,45 @@ const hideUsername = (username) => {
   return "xxx" + username.substring(5);
 }
 
-module.exports = { sendNotification, formatMoney, hideUsername }
+const sendNotificationToAdmin = async (tokens, title, body) => {
+  if (!tokens || tokens.length === 0) {
+    console.warn('⚠️ No tokens provided.');
+    return;
+  }
+
+  const message = {
+    tokens: tokens, // danh sách token
+    notification: {
+      title: title,
+      body: body,
+    },
+    android: {
+      priority: 'high',
+    },
+    apns: {
+      payload: {
+        aps: {
+          sound: 'default',
+        },
+      },
+    },
+  };
+
+  try {
+    const response = await messaging.sendMulticast(message);
+    console.log(`✅ Notifications sent: ${response.successCount} success, ${response.failureCount} failed`);
+    
+    // Nếu cần xử lý những token lỗi (ví dụ: không còn hợp lệ)
+    if (response.failureCount > 0) {
+      response.responses.forEach((resp, idx) => {
+        if (!resp.success) {
+          console.error(`❌ Token failed [${tokens[idx]}]:`, resp.error);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('❌ Error sending multicast notification:', error);
+  }
+};
+
+module.exports = { sendNotification, formatMoney, hideUsername, sendNotificationToAdmin }
