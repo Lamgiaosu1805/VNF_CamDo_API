@@ -115,6 +115,7 @@ const TransactionController = {
                 const customer = req.customer
                 const yeuCauNapTien = new YeuCauNapTienModel({
                     customerId: customer._id,
+                    hoTenCustomer: customer.fullname,
                     soTienNap: soTienNap,
                     status: 2,
                     imageURL: baseFolder + fileName
@@ -426,6 +427,23 @@ const TransactionController = {
             console.log(error)
             res.json(FailureResponse("58", error))
         }
-    }
+    },
+    layDSYeuCauNT: async (req, res) => {
+        try {
+            const {customerName} = req.query
+            const listNT = await YeuCauNapTienModel.find({
+                $or: [
+                    { hoTenCustomer: { $regex: customerName || "", $options: "i" } },
+                ]
+            }).sort({ createdAt: -1 })
+            res.json(SuccessResponse({
+                message: "Lấy danh sách yêu cầu nạp tiền thành công",
+                data: listNT
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("54", error))
+        }
+    },
 }
 module.exports = TransactionController

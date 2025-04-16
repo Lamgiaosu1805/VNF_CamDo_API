@@ -6,6 +6,7 @@ const router = express.Router()
 
 //admin
 router.get('/DSYCRutTien', auth.verifyTokenAdmin, TransactionController.layDSYeuCauRT);
+router.get('/DSYCNapTien', auth.verifyTokenAdmin, TransactionController.layDSYeuCauNT);
 router.post('/pheDuyetYCRutTien', auth.verifyTokenAdmin, TransactionController.pheDuyetYeuCauRT);
 router.post('/tuChoiYCRutTien', auth.verifyTokenAdmin, TransactionController.tuChoiYeuCauRT);
 router.get('/lichSuGiaoDichAdmin/:customerId', auth.verifyTokenAdmin, TransactionController.getLSGiaoDich);

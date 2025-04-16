@@ -4,6 +4,7 @@ const moment = require('moment-timezone')
 
 const YeuCauNapTien = new Schema({
     customerId: { type: String, required: true },
+    hoTenCustomer: { type: String, required: true },
     soTienNap: { type: Number, required: true },
     status: { type: Number, required: true, default: 1 },// 1: đang chờ phê duyệt, 2: Đã phê duyệt, 3: Đã từ chối,
     imageURL:  { type: String, required: true },
