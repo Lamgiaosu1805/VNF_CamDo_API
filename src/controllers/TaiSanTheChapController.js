@@ -8,6 +8,7 @@ const TaiSanTheChapController = {
             const number = await LoaiTaiSanTheChapModel.countDocuments()
             const newData = new LoaiTaiSanTheChapModel({
                 ten: body.tenLoaiTaiSan,
+                imageUrl: body.imageUrl,
                 type: number + 1
             })
             await newData.save()
