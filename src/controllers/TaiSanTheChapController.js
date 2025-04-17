@@ -31,6 +31,19 @@ const TaiSanTheChapController = {
             console.log(error)
             res.json(FailureResponse("23", error))
         }
+    },
+    chinhSuaLoaiTS: async (req, res) => {
+        try {
+            const {idLoaiTS, dataLoaiTS} = req.body
+            await LoaiTaiSanTheChapModel.findByIdAndUpdate(idLoaiTS, dataLoaiTS)
+            res.json(SuccessResponse({
+                message: "Thông tin loại tài sản đã được cập nhật",
+
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("65", error))
+        }
     }
 }
 

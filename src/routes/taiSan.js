@@ -7,6 +7,7 @@ const router = express.Router()
 //admin
 router.post('/createLoaiTaiSan', auth.verifyTokenAdmin, TaiSanTheChapController.createLoaiTaiSan);
 router.get('/listTSTheChapAdmin', auth.verifyTokenAdmin, TaiSanTheChapController.showLoaiTaiSan);
+router.post('/updateLoaiTS', auth.verifyTokenAdmin, TaiSanTheChapController.chinhSuaLoaiTS);
 
 
 //customer
