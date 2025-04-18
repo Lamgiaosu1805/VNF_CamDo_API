@@ -150,10 +150,10 @@ const NotificationController = {
     },
     getNotification: async (req, res) => {
         try {
-            const {type} = req.query
+            const {type, page, limit} = req.query
             const isAdmin = req.isAdmin
             const userId = req.user.id
-            const notifications = await NotificationUserModel.find({type, userId, isAdmin}).sort({ createdAt: -1 })
+            const notifications = await NotificationUserModel.find({type, userId, isAdmin}).sort({ createdAt: -1 }).skip((page-1)*limit).limit(limit)
             res.json(SuccessResponse({
                 message: "Lấy danh sách thông báo thành công",
                 data: notifications
