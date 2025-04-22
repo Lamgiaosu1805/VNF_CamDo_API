@@ -18,9 +18,11 @@ const YeuCauVayVon = new Schema({
     idNguoiGiaiNgan: { type: String, default: "" },
     idNguoiThamDinh: { type: String, default: "" },
     giaTriSauThamDinh: { type: Number, default: 0 },
+    soTienMuonVay: { type: Number, required: true },
     donViGia: { type: String, default: "VNĐ" },
     soKyTraNo: { type: Number, default: 0 },
     kyTraNo: { type: Array, default: [] },
+    soCongToMet: { type: Number },
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7

@@ -4,11 +4,24 @@ const moment = require('moment');
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest");
 const { sendNotification } = require("../utils/Tools");
 const NotificationUserModel = require("../models/NotificationUserModel");
+const { default: mongoose } = require("mongoose");
+const NguoiThamChieuModel = require("../models/NguoiThamChieuModel");
 
 const YeuCauVayVonController = {
     guiYeuCauVayVon: async (req, res) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
         try {
-            const {nhanHieu, tenTaiSan, idLoaiTaiSan, namSX} = req.body
+            const {nhanHieu, tenTaiSan, idLoaiTaiSan, namSX, listNguoiThamChieu, congToMet, kyHan, soTienMuonVay} = req.body
+            const dataNguoiThamChieu = JSON.parse(listNguoiThamChieu)
+            const soTienMuonVayInt = parseInt(soTienMuonVay)
+            const soCongToMetInt = parseInt(congToMet)
+            if(!soTienMuonVayInt) {
+                return res.json(FailureResponse("26", "Số tiền muốn vay không đúng định dạng"));
+            }
+            if(!soCongToMetInt) {
+                return res.json(FailureResponse("26", "Số công tơ mét không đúng định dạng"));
+            }
             if (!req.filePaths) {
                 return res.json(FailureResponse("25"));
             }
@@ -19,13 +32,21 @@ const YeuCauVayVonController = {
                 listAnhTaiSan: req.filePaths,
                 customerId: req.user.id,
                 namSX: namSX,
-                maYeuCau: "VNF" + Date.now() + '-' + Math.round(Math.random() * 1E9)
+                maYeuCau: "VNF" + Date.now() + '-' + Math.round(Math.random() * 1E9),
+                soTienMuonVay: soTienMuonVayInt,
+                soKyTraNo: kyHan,
+                soCongToMet: soCongToMetInt
             })
-            await newData.save()
+            await newData.save({session})
+            await NguoiThamChieuModel.insertMany(dataNguoiThamChieu, {session})
+            await session.commitTransaction();
+            session.endSession();
             res.json(SuccessResponse({
                 message: "Tạo yêu cầu vay vốn thành công"
             }));
         } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
             console.log(error)
             res.json(FailureResponse("26", error))
         }
