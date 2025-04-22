@@ -6,6 +6,7 @@ const notificationRouter = require('./notification')
 const hopDongRouter = require('./hopDong')
 const khoanVayRouter = require('./khoanVay')
 const transactionRouter = require('./transaction')
+const nguoiThamChieuRouter = require('./nguoiThamChieu')
 
 const route = (app) => {
     app.use(`/auth`, authRouter)
@@ -16,6 +17,7 @@ const route = (app) => {
     app.use(`/hopDong`, hopDongRouter)
     app.use(`/khoanVay`, khoanVayRouter)
     app.use(`/transaction`, transactionRouter)
+    app.use(`/nguoiThamChieu`, nguoiThamChieuRouter)
 }
 
 module.exports = route;

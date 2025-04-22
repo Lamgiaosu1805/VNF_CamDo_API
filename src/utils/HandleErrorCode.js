@@ -130,6 +130,10 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách thông báo`;
         case "65":
             return `Error: ${errorCode}, Có lỗi khi cập nhật thông tin loại tài sản`;
+        case "66":
+            return `Error: ${errorCode}, Có lỗi khi thêm mối quan hệ người tham chiếu`;
+        case "67":
+            return `Error: ${errorCode}, Có lỗi khi lấy danh sách mối quan hệ người tham chiếu`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
