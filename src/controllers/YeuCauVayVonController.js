@@ -13,7 +13,14 @@ const YeuCauVayVonController = {
         session.startTransaction()
         try {
             const {nhanHieu, tenTaiSan, idLoaiTaiSan, namSX, listNguoiThamChieu, congToMet, kyHan, soTienMuonVay} = req.body
-            const dataNguoiThamChieu = JSON.parse(listNguoiThamChieu)
+            const dataNguoiThamChieu = JSON.parse(listNguoiThamChieu).map((e) => {
+                return {
+                    idCustomer: req.user.id,
+                    hoTenNguoiThamChieu: e.hoTenNguoiThamChieu,
+                    idMoiQuanHe: e.idMoiQuanHe,
+                    soDienThoai: e.soDienThoai
+                }
+            })
             const soTienMuonVayInt = parseInt(soTienMuonVay)
             const soCongToMetInt = parseInt(congToMet)
             if(!soTienMuonVayInt) {
