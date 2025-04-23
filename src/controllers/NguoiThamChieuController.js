@@ -28,6 +28,22 @@ const NguoiThamChieuController = {
             console.log(error)
             res.json(FailureResponse("67", error))
         }
+    },
+    xoaMQHNguoiThamChieu: async (req, res) => {
+        try {
+            const {idMQH} = req.body
+            const mqh = await MQHNguoiThamChieu.findByIdAndUpdate(idMQH, {isDelete: true})
+            if(!mqh) {
+                const error = "Mối quan hệ không tồn tại"
+                return res.json(FailureResponse("68", error))
+            }
+            res.json(SuccessResponse({
+                message: "Xoá mối quan hệ người tham chiếu thành công",
+            }))
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("68", error))
+        }
     }
 }
 
