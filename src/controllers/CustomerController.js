@@ -4,6 +4,7 @@ const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const fs = require('fs');
+const NotificationUserModel = require("../models/NotificationUserModel")
 
 const deleteUploadedFiles = (files) => {
     if (!files) return;
@@ -91,8 +92,10 @@ const CustomerController = {
         try {
             const customerInfo = req.customer
             const { password, firebaseToken, anhChanDung, cccdBackImg, cccdFrontImg, deviceId, ...cleanedUser} = customerInfo._doc;
+            const soTBChuaDoc = await NotificationUserModel.countDocuments({userId: customerInfo._id, isSeen: false})
             res.json(SuccessResponse({
                 message: "Lấy thông tin thành công",
+                soTBChuaDoc: soTBChuaDoc,
                 data: cleanedUser
             }))
         } catch (error) {
