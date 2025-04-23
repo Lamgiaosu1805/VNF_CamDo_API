@@ -1,7 +1,7 @@
 const { Expo } = require("expo-server-sdk");
 const messaging = require('../../firebase');
 
-const sendNotification = (listToken, title, content) => {
+const sendNotification = (listToken, title, content, listMessage) => {
     let expo = new Expo({
         accessToken: process.env.EXPO_ACCESS_TOKEN,
         /*
@@ -21,25 +21,30 @@ const sendNotification = (listToken, title, content) => {
       
       // Create the messages that you want to send to clients
       let messages = [];
-      for (let pushToken of listToken) {
-        // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
-      
-        // Check that all your push tokens appear to be valid Expo push tokens
-        if (!Expo.isExpoPushToken(pushToken)) {
-          console.error(`Push token ${pushToken} is not a valid Expo push token`);
-          continue;
+      if(!listMessage) {
+        console.log("non Message")
+        for (let pushToken of listToken) {
+          // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
+        
+          // Check that all your push tokens appear to be valid Expo push tokens
+          if (!Expo.isExpoPushToken(pushToken)) {
+            console.error(`Push token ${pushToken} is not a valid Expo push token`);
+            continue;
+          }
+        
+          // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
+          messages.push({
+            to: pushToken,
+            title: title,
+            sound: 'default',
+            body: content,
+            data: { withSome: 'data' },
+          })
         }
-      
-        // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
-        messages.push({
-          to: pushToken,
-          title: title,
-          sound: 'default',
-          body: content,
-          data: { withSome: 'data' },
-        })
       }
-      
+      else {
+        messages = listMessage
+      }
       // The Expo push notification service accepts batches of notifications so
       // that you don't need to send 1000 requests to send 1000 notifications. We
       // recommend you batch your notifications to reduce the number of requests
