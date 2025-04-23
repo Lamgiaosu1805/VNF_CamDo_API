@@ -8,7 +8,7 @@ const { default: Expo } = require('expo-server-sdk');
 const { sendNotification } = require('../utils/Tools');
 
 module.exports = () => {
-    cron.schedule('0 * * * *', async () => {
+    cron.schedule('*/30 * * * * *', async () => {
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
