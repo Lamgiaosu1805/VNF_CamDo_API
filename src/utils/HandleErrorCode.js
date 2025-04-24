@@ -136,6 +136,8 @@ const HandleErrorCode = (errorCode) => {
             return `Error: ${errorCode}, Có lỗi khi lấy danh sách mối quan hệ người tham chiếu`;
         case "68":
             return `Error: ${errorCode}, Có lỗi khi xoá mối quan hệ người tham chiếu`;
+        case "69":
+            return `Error: ${errorCode}, Có lỗi khi lấy thông tin account Admin`;
         default:
             return "Error: " + errorCode + ", Lỗi không xác định";
     }
