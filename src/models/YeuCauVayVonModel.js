@@ -23,6 +23,7 @@ const YeuCauVayVon = new Schema({
     soKyTraNo: { type: Number, default: 0 },
     kyTraNo: { type: Array, default: [] },
     soCongToMet: { type: Number },
+    idNguoiHuyYeuCau: { type: String, default: "" }, // Nếu có thì admin huỷ, không thì là người dùng huỷ
     createdAt: {
         type: String,
         default: () => moment.tz(Date.now(), 'Asia/Ho_Chi_Minh').format(), // Tự động lưu với múi giờ +7

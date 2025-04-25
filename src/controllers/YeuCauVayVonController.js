@@ -272,11 +272,17 @@ const YeuCauVayVonController = {
             if(lyDoHuy == "" || !lyDoHuy) {
                 return res.json(FailureResponse("47"))
             }
-            const yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, customerId: req.user.id})
+            var yeuCau
+            if (req.customer) {
+                yeuCau = await YeuCauVayVonModel.findOne({_id: idYeuCau, customerId: req.user.id})
+            }
+            else {
+                yeuCau = await YeuCauVayVonModel.findById(idYeuCau)
+            }
             if(!yeuCau || yeuCau.status == 4 || yeuCau.status == 5) {
                 return res.json(FailureResponse("35"))
             }
-            await yeuCau.updateOne({status: 5, lyDoHuy: lyDoHuy})
+            await yeuCau.updateOne({status: 5, lyDoHuy: lyDoHuy, idNguoiHuyYeuCau: req.customer ? "": req.user.id})
             res.json(SuccessResponse({
                 message: "Đã huỷ yêu cầu vay vốn",
             }))

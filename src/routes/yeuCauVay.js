@@ -11,6 +11,7 @@ router.post('/thamDinh', auth.verifyTokenAdmin, YeuCauVayVonController.thamDinh)
 router.post('/tinhSoTien', auth.verifyTokenAdmin, YeuCauVayVonController.tinhTien);
 router.post('/dongYGiaiNgan', auth.verifyTokenAdmin, YeuCauVayVonController.dongYGiaiNgan);
 router.get('/getDanhSachYCAdmin', auth.verifyTokenAdmin, YeuCauVayVonController.getYCGoiVonAdmin);
+router.post('/huyYeuCauAdmin', auth.verifyTokenAdmin, YeuCauVayVonController.huyYeuCau);
 
 
 
