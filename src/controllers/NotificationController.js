@@ -92,7 +92,7 @@ const NotificationController = {
                 const listToken = notificationTokenAdmin.map((e) => {
                     return e.firebaseToken
                 })
-                console.log(listToken)
+                // console.log(listToken)
         const message = {
             tokens: listToken, // danh sách token
             notification: {
@@ -119,7 +119,7 @@ const NotificationController = {
             if (response.failureCount > 0) {
               response.responses.forEach((resp, idx) => {
                 if (!resp.success) {
-                  console.error(`❌ Token failed [${tokens[idx]}]:`, resp.error);
+                  console.error(`❌ Token failed [${listToken[idx]}]:`, resp.error);
                 }
               });
             }
