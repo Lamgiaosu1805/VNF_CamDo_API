@@ -22,7 +22,6 @@ const sendNotification = (listToken, title, content, listMessage) => {
       // Create the messages that you want to send to clients
       let messages = [];
       if(!listMessage) {
-        console.log("non Message")
         for (let pushToken of listToken) {
           // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
         
