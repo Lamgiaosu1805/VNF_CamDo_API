@@ -153,9 +153,18 @@ const NotificationController = {
             const {type, page, limit} = req.query
             const isAdmin = req.isAdmin
             const userId = req.user.id
-            const notifications = await NotificationUserModel.find({type, userId, isAdmin}).sort({ createdAt: -1 }).skip((page-1)*limit).limit(limit)
+            const filter = { type, userId, isAdmin };
+            const totalCount = await NotificationUserModel.countDocuments(filter);
+            const totalPages = Math.ceil(totalCount / limit);
+            const notifications = await NotificationUserModel
+                .find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
             res.json(SuccessResponse({
                 message: "Lấy danh sách thông báo thành công",
+                totalPages,
+                currentPage: page,
                 data: notifications
             }))
         } catch (error) {
