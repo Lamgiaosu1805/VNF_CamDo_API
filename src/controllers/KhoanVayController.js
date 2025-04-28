@@ -92,8 +92,14 @@ const KhoanVayController = {
     },
     layDanhSachKhoanVayAdmin: async (req, res) => {
         try {
-            const {status} = req.query
-            const listData = await KhoanVayModel.find({status: status})
+            const {status, isOutDate} = req.query
+            var listData
+            if(isOutDate == 1) {
+                const redisData = await redis.get("listKVQuaHan")
+                listData = JSON.parse(redisData)
+            }
+            else {
+                listData = await KhoanVayModel.find({status: status})
                 .populate('customerId')
                 .lean()
                 .then((results) =>
@@ -106,6 +112,7 @@ const KhoanVayController = {
                         customerId: undefined,
                     }))
                 );
+            }  
             res.json(SuccessResponse({
                 message: "Lấy danh sách khoản vay thành công",
                 data: listData

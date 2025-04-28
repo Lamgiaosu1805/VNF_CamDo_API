@@ -6,12 +6,14 @@ const NotificationTokenModel = require('../models/NotificationTokenModel');
 const { default: mongoose } = require('mongoose');
 const { default: Expo } = require('expo-server-sdk');
 const { sendNotification } = require('../utils/Tools');
+const redis = require('../config/connectRedis');
 
 module.exports = () => {
-    cron.schedule('0 * * * *', async () => {
+    cron.schedule('* * * * *', async () => {
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
+            console.log("============SCAN STATUS LOAN / START=====================")
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
@@ -22,7 +24,7 @@ module.exports = () => {
                         localField: 'soHopDong',
                         foreignField: 'soHopDong',
                         as: 'kyVayList'
-                    }
+                    },
                 },
                 {
                     $addFields: {
@@ -77,6 +79,35 @@ module.exports = () => {
                 {
                     $match: {
                         'kyVayQuaHan.0': { $exists: true }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'customers',
+                        let: { customerIdStr: '$customerId' }, // Gán trường customerId vào một biến cục bộ
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$_id', { $toObjectId: '$$customerIdStr' }] // Chuyển đổi customerId thành ObjectId để so sánh
+                                    }
+                                }
+                            }, {
+                                $project: {
+                                    _id: 0,
+                                    username: 1,
+                                    fullname: 1,
+                                    phoneNumber: '$username'
+                                }
+                            }
+                        ],
+                        as: 'customerInfo'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$customerInfo',
+                        preserveNullAndEmptyArrays: true // Giữ lại khoản vay nếu không tìm thấy customer
                     }
                 }
             ]).session(session);
@@ -133,10 +164,14 @@ module.exports = () => {
             if (notifications.length > 0) {
                 await NotificationUserModel.insertMany(notifications, { session });
             }
-
             await session.commitTransaction();
             session.endSession();
-
+            try {
+                await redis.set("listKVQuaHan", JSON.stringify(result), "EX", 60 * 60 * 24); // hết hạn sau 1 ngày
+                console.log("=============== Cached danh sách khoản vay quá hạn ==================")
+            } catch (error) {
+                console.log("Cached Error KVQH: ", error)
+            }
             if (messages.length > 0) {
                 sendNotification('', '', '', messages);
             }
@@ -144,6 +179,8 @@ module.exports = () => {
             console.log(error);
             await session.abortTransaction();
             session.endSession();
+        } finally {
+            console.log("============SCAN STATUS LOAN / END=====================")
         }
     });
 };
