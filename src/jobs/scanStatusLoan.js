@@ -9,7 +9,7 @@ const { sendNotification } = require('../utils/Tools');
 const redis = require('../config/connectRedis');
 
 module.exports = () => {
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('0 0 * * *', async () => {
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
