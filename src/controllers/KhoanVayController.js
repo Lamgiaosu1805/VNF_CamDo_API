@@ -92,7 +92,8 @@ const KhoanVayController = {
     },
     layDanhSachKhoanVayAdmin: async (req, res) => {
         try {
-            const listData = await KhoanVayModel.find()
+            const {status} = req.query
+            const listData = await KhoanVayModel.find({status: status})
                 .populate('customerId')
                 .lean()
                 .then((results) =>
