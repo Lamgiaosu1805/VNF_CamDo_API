@@ -134,5 +134,21 @@ const CustomerController = {
             res.json(FailureResponse("44", error))
         }
     },
+    getCustomerInfoAdmin: async (req, res) => {
+        try {
+            const {customerId} = req.params
+            const customer = await CustomerModel.findById(customerId).select('-password')
+            const basePath = "/var/www/X_finance_private/"
+            const pathPortraitImg = basePath + customer.anhChanDung
+            const pathFrontCCCDImg = basePath + customer.cccdFrontImg
+            const pathBackCCCDImg = basePath + customer.cccdBackImg
+            const imageBuffer = fs.readFileSync(pathPortraitImg)
+            const base64Image = imageBuffer.toString('base64');
+            res.json(base64Image)
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("38", error))
+        }
+    }
 }
 module.exports = CustomerController
