@@ -10,7 +10,7 @@ const router = express.Router()
 
 //admin
 router.get('/danhSachKhachHang', auth.verifyTokenAdmin, CustomerController.layDanhSachKhachHang);
-router.get('/:customerId', auth.verifyTokenAdmin, CustomerController.getCustomerInfoAdmin);
+router.get('/customerInfo/:customerId', auth.verifyTokenAdmin, CustomerController.getCustomerInfoAdmin);
 
 //customer
 router.post('/ekyc', auth.verifyTokenCustomerNonEkyc, validateDevice.checkSameDeviceId, uploadEkycMiddleware, CustomerController.ekyc);
