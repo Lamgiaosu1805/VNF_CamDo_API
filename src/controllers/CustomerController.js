@@ -150,8 +150,8 @@ const CustomerController = {
     },
     getIdentityImage: async (req, res) => {
         try {
-            const { filePath } = req.params;
-            const imagePath = path.resolve('/var/www/', filePath);
+            const { fileName } = req.params;
+            const imagePath = path.resolve('/var/www/X_finance_private', fileName);
             if (!fs.existsSync(imagePath)) {
                 return res.status(404).send('Image not found');
             }
