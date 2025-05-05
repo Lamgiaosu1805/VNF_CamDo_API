@@ -136,8 +136,14 @@ const CustomerController = {
     },
     getCustomerInfoAdmin: async (req, res) => {
         try {
-            const {username} = req.params
-            const customer = await CustomerModel.findOne({username: username}).select('-password -firebaseToken')
+            const {username, customerId} = req.query
+            var customer
+            if(username) {
+                customer = await CustomerModel.findOne({username: username}).select('-password -firebaseToken')
+            }
+            else {
+                customer = await CustomerModel.findById(customerId).select('-password -firebaseToken')
+            }
             res.json(SuccessResponse({
                 message: "Lấy thông tin khách hàng thành công",
                 data: customer
