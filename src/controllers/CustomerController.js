@@ -138,15 +138,11 @@ const CustomerController = {
     getCustomerInfoAdmin: async (req, res) => {
         try {
             const {customerId} = req.params
-            const customer = await CustomerModel.findById(customerId).select('-password')
-            const basePath = "/var/www/"
-            const pathPortraitImg = basePath + customer.anhChanDung;
-
-            const pathFrontCCCDImg = basePath + customer.cccdFrontImg
-            const pathBackCCCDImg = basePath + customer.cccdBackImg
-            const imageBuffer = fs.readFileSync(pathPortraitImg)
-            const base64Image = imageBuffer.toString('base64');
-            res.sendFile(pathPortraitImg);
+            const customer = await CustomerModel.findById(customerId).select('-password -firebaseToken')
+            res.json(SuccessResponse({
+                message: "Lấy thông tin khách hàng thành công",
+                data: customer
+            }));
         } catch (error) {
             console.log(error)
             res.json(FailureResponse("38", error))
