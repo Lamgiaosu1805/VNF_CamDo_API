@@ -1,7 +1,6 @@
 const { default: mongoose } = require("mongoose")
 const CustomerHistoryLocationModel = require("../models/CustomerHistoryLocationModel")
 const CustomerModel = require("../models/CustomerModel")
-const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
 const fs = require('fs')
 const NotificationUserModel = require("../models/NotificationUserModel")
