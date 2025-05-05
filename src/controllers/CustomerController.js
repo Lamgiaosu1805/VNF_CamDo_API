@@ -147,6 +147,19 @@ const CustomerController = {
             console.log(error)
             res.json(FailureResponse("38", error))
         }
+    },
+    getIdentityImage: async (req, res) => {
+        try {
+            const { filePath } = req.params;
+            const imagePath = path.resolve('/var/www/', filePath);
+            if (!fs.existsSync(imagePath)) {
+                return res.status(404).send('Image not found');
+            }
+            res.sendFile(imagePath);
+        } catch (error) {
+            console.log(error)
+            res.json(FailureResponse("", error))   
+        }
     }
 }
 module.exports = CustomerController
