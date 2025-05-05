@@ -10,7 +10,7 @@ const router = express.Router()
 
 //admin
 router.get('/danhSachKhachHang', auth.verifyTokenAdmin, CustomerController.layDanhSachKhachHang);
-router.get('/customerInfo/:customerId', auth.verifyTokenAdmin, CustomerController.getCustomerInfoAdmin);
+router.get('/customerInfo/:username', auth.verifyTokenAdmin, CustomerController.getCustomerInfoAdmin);
 router.get('/identityCustomerImage/:fileName', auth.verifyTokenAdmin, CustomerController.getIdentityImage);
 
 //customer
