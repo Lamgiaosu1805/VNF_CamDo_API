@@ -3,8 +3,9 @@ const CustomerHistoryLocationModel = require("../models/CustomerHistoryLocationM
 const CustomerModel = require("../models/CustomerModel")
 const NotificationTokenModel = require("../models/NotificationTokenModel")
 const { FailureResponse, SuccessResponse } = require("../utils/ResponseRequest")
-const fs = require('fs');
+const fs = require('fs')
 const NotificationUserModel = require("../models/NotificationUserModel")
+const path = require('path')
 
 const deleteUploadedFiles = (files) => {
     if (!files) return;
