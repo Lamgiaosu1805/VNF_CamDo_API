@@ -173,7 +173,9 @@ module.exports = () => {
                 console.log("Cached Error KVQH: ", error)
             }
             if (messages.length > 0) {
-                sendNotification('', '', '', messages);
+                if(messages.length > 0) {
+                    sendNotification('', '', '', messages);
+                }
             }
         } catch (error) {
             console.log(error);

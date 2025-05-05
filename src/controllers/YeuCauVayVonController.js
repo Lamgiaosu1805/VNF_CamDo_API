@@ -176,7 +176,7 @@ const YeuCauVayVonController = {
     getYCGoiVonAdmin: async (req, res) => {
         try {
             const {status} = req.query
-            const danhSachYc = await YeuCauVayVonModel.find({status: status}).populate('customerId').lean()
+            const danhSachYc = await YeuCauVayVonModel.find({status: status}).populate('customerId').lean().sort({ createdAt: -1 })
             .then((results) =>
                 results.map((item) => ({
                 ...item,

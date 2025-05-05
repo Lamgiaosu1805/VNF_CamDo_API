@@ -99,7 +99,7 @@ const KhoanVayController = {
                 listData = JSON.parse(redisData)
             }
             else {
-                listData = await KhoanVayModel.find({status: status})
+                listData = await KhoanVayModel.find({status: status}).sort({ createdAt: -1 })
                 .populate('customerId')
                 .lean()
                 .then((results) =>
