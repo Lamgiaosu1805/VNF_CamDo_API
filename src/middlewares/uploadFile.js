@@ -7,12 +7,12 @@ const YeuCauVayVonModel = require('../models/YeuCauVayVonModel');
 
 //=================================================================================
 //isDev
-const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
-const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
+// const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
+// const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
 
-//isProductionn
-// const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
-// const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
+isProductionn
+const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
+const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
 
 //=================================================================================
 
@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ 
     storage, 
     // limits: { fileSize: 10 * 1024 * 1024 } // Tăng giới hạn kích thước file lên 10MB
-}).array('images', 3); // Cho phép upload tối đa 3 file
+}).array('images', 6); // Cho phép upload tối đa 6 file
 
 const processImages = async (req, res, next) => {
     if (!req.files || !req.uploadPaths) return next();
