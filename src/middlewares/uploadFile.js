@@ -7,12 +7,12 @@ const YeuCauVayVonModel = require('../models/YeuCauVayVonModel');
 
 //=================================================================================
 //isDev
-// const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
-// const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
+const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
+const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
 
 //isProductionn
-const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
-const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
+// const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
+// const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
 
 //=================================================================================
 
@@ -77,6 +77,7 @@ const uploadHandler = async (req, res, next) => {
     // }
     upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
+            console.log(err.message)
             return res.json(FailureResponse("24", err.message));
         } else if (err) {
             return res.status(500).json({ message: 'Unknown error', error: err.message });
