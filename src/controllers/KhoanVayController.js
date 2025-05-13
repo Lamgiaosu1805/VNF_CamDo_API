@@ -33,13 +33,19 @@ const KhoanVayController = {
                 ]).sort({ createdAt: -1 })
                 const filteredData = listData.map((e) => {
                     const today = new Date();
-                    const ngayGanNhat = e.kyTraNo
+                    var ngayGanNhat
+                    const listNgay = e.kyTraNo
                         .map(ele => {
                             const [day, month, year] = ele.ngayTraNo.split("/").map(Number);
                             return new Date(year, month - 1, day);
                         })
-                        .filter(date => date > today)
-                        .sort((a, b) => a - b)[0]
+                    const ngayGanNhatFiltered = listNgay.filter(date => date > today)
+                    if(ngayGanNhatFiltered.length > 0) {
+                        ngayGanNhat = ngayGanNhatFiltered.sort((a, b) => a - b)[0]
+                    }
+                    else {
+                        ngayGanNhat = listNgay[listNgay.length - 1]
+                    }
                     var cacKyTruocChuaTT = e.kyTraNo.filter(ele => {
                         const [day, month, year] = ele.ngayTraNo.split("/").map(Number);
                         const date = new Date(year, month - 1, day);
