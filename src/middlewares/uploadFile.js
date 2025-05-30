@@ -6,13 +6,8 @@ const { FailureResponse } = require('../utils/ResponseRequest');
 const YeuCauVayVonModel = require('../models/YeuCauVayVonModel');
 
 //=================================================================================
-//isDev
-// const baseOriginalFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
-// const baseCompressedFolder = path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
-
-// isProductionn
-const baseOriginalFolder = '/var/www/X_finance_upload/file_goc';
-const baseCompressedFolder = '/var/www/X_finance_upload/file_nen';
+const baseOriginalFolder = process.env.TYPE_DEPLOY == "PRODUCTION" ? '/var/www/X_finance_upload/file_goc' : path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_goc');
+const baseCompressedFolder = process.env.TYPE_DEPLOY == "PRODUCTION" ? '/var/www/X_finance_upload/file_nen' : path.join(require('os').homedir(), 'Desktop/X_finance_upload/file_nen');
 
 //=================================================================================
 

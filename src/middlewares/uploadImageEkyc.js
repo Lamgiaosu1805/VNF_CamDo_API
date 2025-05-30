@@ -5,11 +5,7 @@ const os = require('os');
 const { FailureResponse } = require('../utils/ResponseRequest');
 
 // Đường dẫn thư mục lưu ảnh
-//Dev
-// const uploadDir = path.join(os.homedir(), 'Desktop', 'X_finance_private');
-
-//Production
-const uploadDir = '/var/www/X_finance_private';
+const uploadDir = process.env.TYPE_DEPLOY == "PRODUCTION" ? '/var/www/X_finance_private' : path.join(os.homedir(), 'Desktop', 'X_finance_private');
 
 // Tạo thư mục nếu chưa có
 if (!fs.existsSync(uploadDir)) {
